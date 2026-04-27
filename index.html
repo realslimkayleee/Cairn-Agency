@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAIRN — Beautiful Websites for Growing Companies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white: #ffffff;
+      --black: #111111;
+      --gray: #6f7480;
+      --light-gray: #f9fafb;
+      --green: #d8eee5;
+      --sage: #b7d3c8;
+      --blue: #c0d3df;
+      --lavender: #d4d2fb;
+      --yellow: #fcffa9;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translate(var(--reveal-x, 0), 24px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(var(--reveal-x, 0), 0);
+      }
+    }
+
+    @keyframes macFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes sheen {
+      0% { transform: translateX(-120%) skewX(-18deg); }
+      42%, 100% { transform: translateX(220%) skewX(-18deg); }
+    }
+
+    @keyframes gradientDrift {
+      0%, 100% { background-position: center top; }
+      50% { background-position: center 42px; }
+    }
+
+    /* ── GRADIENT BACKGROUND ── */
+    .page-gradient {
+      background: linear-gradient(
+        180deg,
+        #ffffff 0,
+        #ffffff 210px,
+        #f7fcfa 330px,
+        #e7f5ef 470px,
+        #d3ebe2 640px,
+        #c1dfd1 880px,
+        #acd0c1 1160px,
+        #bfd2e0 1480px,
+        #d1d0fb 1880px,
+        #dfdff0 2240px,
+        #f4f5cb 2650px,
+        #fdffa8 100%
+      );
+      background-size: 100% 112%;
+      animation: gradientDrift 14s ease-in-out infinite;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 64px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .nav-logo span {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      color: #3d6b56;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 38px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--black);
+      font-size: 16px;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gray); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 820px;
+      display: flex;
+      align-items: center;
+      padding: 72px 70px 44px;
+      max-width: 1680px;
+      margin: 0 auto;
+      gap: 28px;
+    }
+
+    .hero-left {
+      flex: 0.92;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      --reveal-x: 28px;
+      animation: fadeUp 900ms ease both;
+    }
+
+    .hero-headline {
+      font-size: clamp(34px, 4vw, 58px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: 0;
+      color: var(--black);
+      white-space: nowrap;
+    }
+
+    .hero-headline .gradient-text {
+      background: linear-gradient(90deg, #2fb45a 0%, #3d74f0 52%, #e045ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtext {
+      font-size: clamp(15px, 1.1vw, 18px);
+      color: var(--gray);
+      line-height: 1.42;
+      max-width: 520px;
+      font-weight: 300;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--black);
+      color: var(--white);
+      padding: 17px 30px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 500;
+      text-decoration: none;
+      width: fit-content;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-btn::after,
+    .cta-btn::after {
+      content: "";
+      position: absolute;
+      inset: -30% auto -30% -45%;
+      width: 42%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.26), transparent);
+      animation: sheen 4.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .hero-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hero-right {
+      flex: 1.38;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: fadeUp 1000ms 120ms ease both;
+    }
+
+    .macbook-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1010px;
+      animation: macFloat 7s ease-in-out infinite;
+    }
+
+    .macbook-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0 30px 38px rgba(39, 78, 61, 0.18));
+    }
+
+    .screen-video {
+      position: absolute;
+      top: 20.7%;
+      left: 16.7%;
+      width: 66.5%;
+      height: 40%;
+      z-index: 2;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* ── SERVICES ── */
+    .services-section {
+      padding: 78px 60px 62px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 3vw, 48px);
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--black);
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--gray);
+      margin-top: 20px;
+      font-weight: 300;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 54px 68px;
+      margin-top: 98px;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 42px 34px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      box-shadow: 0 18px 42px rgba(70, 93, 115, 0.08);
+      transition: transform 0.25s, box-shadow 0.25s;
+      min-height: 318px;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 54px rgba(70, 93, 115, 0.14);
+    }
+
+    .service-img {
+      width: 166px;
+      height: 222px;
+      object-fit: cover;
+      border-radius: 16px;
+      flex-shrink: 0;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .service-card:hover .service-img {
+      transform: scale(1.035);
+      filter: saturate(1.08) contrast(1.03);
+    }
+
+    .service-text { flex: 1; }
+
+    .service-name {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--black);
+      margin-bottom: 18px;
+      line-height: 1.15;
+    }
+
+    .service-desc {
+      font-size: 16px;
+      color: var(--gray);
+      line-height: 1.35;
+      font-weight: 300;
+    }
+
+    /* ── TEAM ── */
+    .team-section {
+      padding: 18px 60px 74px;
+      max-width: 1475px;
+      margin: 0 auto;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 124px;
+      margin-top: 54px;
+      max-width: 1030px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .bio-card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 38px 32px 34px;
+      min-height: 664px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bio-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    .bio-avatar {
+      width: 134px;
+      height: 134px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e5e7eb;
+    }
+
+    .bio-divider {
+      width: 36px;
+      height: 2px;
+      background: #e5aab0;
+      border-radius: 2px;
+      margin: 26px auto 0;
+    }
+
+    .bio-name {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--black);
+      margin-top: 34px;
+    }
+
+    .bio-role {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: #7c6fa0;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    .bio-text {
+      font-size: 16px;
+      color: var(--gray);
+      line-height: 1.6;
+      font-weight: 300;
+      margin-top: 26px;
+      flex: 1;
+    }
+
+    .bio-links {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .bio-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border-radius: 100px;
+      border: 1.5px solid #e5e7eb;
+      font-size: 16px;
+      font-weight: 400;
+      text-decoration: none;
+      color: var(--black);
+      flex: 1;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .bio-link:hover {
+      border-color: #9ca3af;
+      background: #f9fafb;
+    }
+
+    .bio-link img {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ── FOOTER CTA ── */
+    .footer-cta {
+      padding: 24px 60px 64px;
+      text-align: center;
+    }
+
+    .footer-cta p {
+      font-size: 20px;
+      color: var(--black);
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--black);
+      color: var(--white);
+      padding: 14px 44px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 300;
+      text-decoration: none;
+      letter-spacing: 0.45em;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero { flex-direction: column; padding: 118px 40px 60px; min-height: auto; }
+      .hero-right { width: 100%; }
+      .hero-left { --reveal-x: 0; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-card { min-height: 260px; }
+      nav { padding: 16px 40px; }
+      .hero-headline { white-space: normal; }
+      .team-grid { gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .hero { padding: 90px 24px 60px; }
+      .services-section, .team-section { padding: 60px 24px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .footer-cta { padding: 40px 24px 60px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+      .service-card { min-height: 0; padding: 24px; }
+      .service-img { width: 118px; height: 118px; }
+      .bio-card { min-height: 560px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-gradient">
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="assets/cairn_logo.png" alt="Cairn logo" />
+      <span>CAIRN</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#team">About Us</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <h1 class="hero-headline">
+        Beautiful websites for<br>
+        <span class="gradient-text">growing companies.</span>
+      </h1>
+      <p class="hero-subtext">We design modern, high-performing websites that help businesses stand out and grow more.</p>
+      <a href="#contact" class="hero-btn">
+        Contact Us
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-right">
+      <div class="macbook-wrapper">
+        <video class="screen-video" autoplay loop muted playsinline>
+          <source src="assets/motion-tiles.mp4" type="video/mp4" />
+        </video>
+        <img class="macbook-img" src="assets/mac.png" alt="MacBook" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services">
+    <div class="section-header">
+      <h2 class="section-title">What We Offer</h2>
+      <p class="section-subtitle">A selection of services designed to elevate your online presence.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <img src="assets/web-creation.png" alt="Website Creation" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">Website Creation</div>
+          <div class="service-desc">Custom websites built from scratch for businesses that need a strong online presence.</div>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <img src="assets/branding-visual-refresh.png" alt="Branding & Visual Refresh" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">Branding & Visual Refresh</div>
+          <div class="service-desc">Updated colors, fonts, visuals, and design systems that strengthen your brand identity.</div>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <img src="assets/e-commerce.png" alt="E-Commerce" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">E-Commerce</div>
+          <div class="service-desc">Online stores with smooth checkout, product pages, and mobile-friendly shopping.</div>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <img src="assets/landing-page.png" alt="Landing Pages" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">Landing Pages</div>
+          <div class="service-desc">Focused pages designed for ads, launches, promotions, and lead generation.</div>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <img src="assets/ai-ml.png" alt="AI & Machine Learning" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">AI & Machine Learning</div>
+          <div class="service-desc">Add chatbots, automations, smart forms, predictive insights, and machine learning powered features to your website.</div>
+        </div>
+      </div>
+
+      <div class="service-card reveal">
+        <img src="assets/support-maintenance.png" alt="Support & Maintenance" class="service-img" />
+        <div class="service-text">
+          <div class="service-name">Support & Maintenance</div>
+          <div class="service-desc">Ongoing updates, fixes, edits, and improvements after your website goes live.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section" id="team">
+    <div class="section-header">
+      <h2 class="section-title">Meet the team</h2>
+      <p class="section-subtitle">The people behind the curated design. We're high-level engineers<br>and complex artists who care about crafting impactful, unique<br>websites that tell your story.</p>
+    </div>
+
+    <div class="team-grid">
+
+      <div class="bio-card reveal">
+        <img class="bio-avatar" src="assets/kaylee-photo.png" alt="Kaylee King" />
+        <div class="bio-divider"></div>
+        <div class="bio-name">Kaylee King</div>
+        <div class="bio-role">Engineer</div>
+        <div class="bio-text">INSERT BIO HERE</div>
+        <div class="bio-links">
+          <a href="#" class="bio-link">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="filter:invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg)" />
+            LinkedIn
+          </a>
+          <a href="#" class="bio-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            Link
+          </a>
+        </div>
+      </div>
+
+      <div class="bio-card reveal">
+        <img class="bio-avatar" src="assets/kaylee-photo.png" alt="Kaylee King" />
+        <div class="bio-divider"></div>
+        <div class="bio-name">Kaylee King</div>
+        <div class="bio-role">Engineer</div>
+        <div class="bio-text">INSERT BIO HERE</div>
+        <div class="bio-links">
+          <a href="#" class="bio-link">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" style="filter:invert(30%) sepia(100%) saturate(500%) hue-rotate(190deg)" />
+            LinkedIn
+          </a>
+          <a href="#" class="bio-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            Link
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <div class="footer-cta" id="contact">
+    <p>Have a project in mind? We'd love to hear about it!</p>
+    <a href="mailto:hello@cairn.agency" class="cta-btn">
+      Get in touch
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+</div>
+
+<script>
+  const revealItems = document.querySelectorAll('.reveal');
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+
+  revealItems.forEach((item, index) => {
+    item.style.transitionDelay = `${Math.min(index * 70, 280)}ms`;
+    revealObserver.observe(item);
+  });
+</script>
+
+</body>
+</html>
