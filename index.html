@@ -846,9 +846,11 @@
       }
       .mobile-title-break { display: block; }
       .gradient-word { display: block; }
+      .hero-copy { text-align: center; }
       .hero-subtext {
         max-width: 100%;
         font-size: 16px;
+        margin-inline: auto;
       }
       .macbook-wrapper { max-width: 100%; }
       .section-title {
@@ -856,12 +858,35 @@
         font-size: clamp(28px, 8.1vw, 34px);
         letter-spacing: -0.045em;
       }
-      .hero-actions { gap: 22px; }
+      .hero-actions { gap: 22px; align-items: center; }
       .services-grid { grid-template-columns: 1fr; }
       .service-card { min-height: auto; }
-      .services-section, .team-section { padding-block: 54px; }
+      .services-section, .team-section, .portfolio-section { padding-block: 54px; }
       .bio-card { padding: 24px; }
       .footer-cta { padding-block: 58px; }
+
+      /* Mobile Portfolio Adjustments */
+      .portfolio-floating-item {
+        transform: rotateX(2deg) rotateY(-1deg);
+      }
+      .portfolio-floating-item:hover {
+        transform: rotateX(0deg) rotateY(0deg) scale(1.01);
+      }
+      .portfolio-floating-img {
+        filter: drop-shadow(0 20px 40px rgba(28, 41, 55, 0.15));
+      }
+      .portfolio-title-pill {
+        width: 85%;
+        max-width: 280px;
+        font-size: 15px;
+        padding: 10px 16px;
+        bottom: 15%;
+        justify-content: center;
+      }
+      .portfolio-title-pill svg {
+        width: 16px;
+        height: 16px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
