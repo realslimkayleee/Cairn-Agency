@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy - CAIRN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0c0f14;
+      --muted: #606775;
+      --sage: #3f9566;
+      --sage-soft: #dceee4;
+      --lavender: #7657df;
+      --cream: #fbfaf4;
+      --line: rgba(12, 15, 20, 0.08);
+      --radius: 22px;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fbfbf7;
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 75% 19%, rgba(83, 189, 126, 0.12), transparent 26rem),
+        linear-gradient(180deg, #fff 0%, #fdfcf7 28%, #edf6f0 48%, #fff 100%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .nav-inner {
+      width: min(100% - 64px, 1420px);
+      min-height: 82px;
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      width: fit-content;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: 0.035em;
+    }
+
+    .brand-mark {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 580;
+    }
+
+    /* CONTENT */
+    .content-container {
+      flex: 1;
+      width: min(100% - 32px, 800px);
+      margin: 132px auto 76px;
+      padding: 42px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .last-updated {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 28px 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      color: #3f4753;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+
+    ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      color: #3f4753;
+      font-size: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .important-clause {
+      background: var(--sage-soft);
+      border-left: 4px solid var(--sage);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 32px;
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    @media (max-width: 820px) {
+      .nav-inner {
+        min-height: 86px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 12px;
+        padding-block: 14px;
+      }
+      .brand { justify-self: center; }
+      .nav-links { gap: 26px; }
+      .nav-links a { font-size: 14px; }
+      .content-container { margin: 116px auto 58px; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/cairn-stone-mark-cropped.png" alt="" />
+          <span>CAIRN</span>
+        </a>
+        <ul class="nav-links" aria-label="Primary navigation">
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="content-container">
+      <h1>Privacy Policy</h1>
+      <div class="last-updated">Last Updated: June 23, 2026</div>
+
+      <p>At Cairn Agency, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you visit our website or interact with our services, specifically detailing our SMS and mobile communications program.</p>
+
+      <h2>1. Information We Collect</h2>
+      <p>We may collect personal information that you voluntarily provide to us, including:</p>
+      <ul>
+        <li>Name, email address, phone number, and message details when you submit our contact form.</li>
+        <li>Information provided when you start a conversation via our chat widget.</li>
+        <li>Usage data and cookies to help analyze traffic and optimize your experience on our website.</li>
+      </ul>
+
+      <h2>2. SMS and Mobile Message Program Details</h2>
+      <p>We operate an SMS program to communicate with our clients and prospective leads. Please review the details of our mobile program:</p>
+      <ul>
+        <li><strong>Program Description:</strong> We send alerts, notifications, project updates, appointment reminders, and promotional offers to users who opt-in to our messages.</li>
+        <li><strong>How Users Opt-In:</strong> You can opt-in by checking the consent boxes on our contact form (under the phone number field) or by interacting with our floating website chat widget. Checking these boxes provides your explicit consent to receive SMS communications.</li>
+        <li><strong>Message Frequency:</strong> Message frequency may vary depending on project status, inquiries, and customer interaction.</li>
+      </ul>
+
+      <h2>3. SMS and Mobile Information Privacy Commitments</h2>
+      <p>Cairn Agency takes the privacy of your mobile communication very seriously.</p>
+      <div class="important-clause">
+        <strong>Mobile Privacy Commitment:</strong> No mobile information or phone number consent details collected on this website will be shared, rented, or sold to third parties or affiliates for marketing or promotional purposes.
+      </div>
+
+      <h2>4. How We Use General Information</h2>
+      <p>We use the general information we collect to respond to your inquiries, deliver our agency services, manage your client account, and send notifications you have opted to receive.</p>
+
+      <h2>5. Data Protection & Security</h2>
+      <p>We implement standard security measures to protect your personal information from unauthorized access, alteration, or disclosure. However, please note that no method of transmission over the internet is 100% secure.</p>
+
+      <h2>6. Changes to this Policy</h2>
+      <p>We reserve the right to modify this Privacy Policy at any time. Any changes will be posted on this page with an updated "Last Updated" date.</p>
+
+      <h2>7. Contact Us</h2>
+      <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+      <p>
+        <strong>Cairn Agency</strong><br />
+        Email: inquiries@cairnagency.io<br />
+        Phone: +1 413-266-5250
+      </p>
+
+      <a href="index.html" class="back-home">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Home
+      </a>
+    </main>
+  </div>
+</body>
+</html>
