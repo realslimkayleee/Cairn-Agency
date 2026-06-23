@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact CAIRN - Beautiful Websites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0c0f14;
+      --muted: #606775;
+      --sage: #3f9566;
+      --sage-soft: #dceee4;
+      --lavender: #7657df;
+      --violet: #9b5df6;
+      --gold: #c89516;
+      --cream: #fbfaf4;
+      --card: rgba(255, 255, 255, 0.82);
+      --line: rgba(12, 15, 20, 0.08);
+      --shadow: 0 24px 70px rgba(32, 43, 58, 0.12);
+      --radius: 22px;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fbfbf7;
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 75% 19%, rgba(83, 189, 126, 0.22), transparent 26rem),
+        radial-gradient(circle at 56% 28%, rgba(235, 219, 117, 0.28), transparent 24rem),
+        linear-gradient(180deg, #fff 0%, #fdfcf7 28%, #edf6f0 48%, #f1effe 72%, #fff7cd 100%);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.72);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+
+    .nav-inner {
+      width: min(100% - 64px, 1420px);
+      min-height: 82px;
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      width: fit-content;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: 0.035em;
+    }
+
+    .brand-mark {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 580;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -9px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sage), var(--lavender));
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 180ms ease;
+    }
+
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+
+    /* CONTENT CONTAINER */
+    .contact-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 132px 0 76px;
+    }
+
+    .contact-content {
+      width: min(100% - 32px, 640px);
+      text-align: center;
+    }
+
+    .contact-header {
+      margin-bottom: 32px;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--sage);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 4vw, 42px);
+      font-weight: 620;
+      line-height: 1.15;
+      letter-spacing: -0.048em;
+    }
+
+    .accent-gold { color: var(--gold); }
+
+    /* FORM CARD */
+    .contact-form-container {
+      padding: 36px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 760;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(12, 15, 20, 0.12);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      transition: all 200ms ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--sage);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(63, 149, 102, 0.15);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+      opacity: 0.65;
+    }
+
+    textarea.form-input {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      min-width: 208px;
+      min-height: 58px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: #0d1018;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
+      font-size: 15px;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
+    }
+
+    /* SUCCESS STATE */
+    .contact-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+      animation: fadeUp 500ms ease both;
+    }
+
+    .contact-success-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      color: var(--sage);
+      background: var(--sage-soft);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-success-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .contact-success-text {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 180ms ease;
+    }
+
+    .back-home:hover {
+      color: var(--sage);
+    }
+
+    @keyframes fadeUp {
+      from { transform: translateY(18px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 820px) {
+      .nav-inner {
+        min-height: 86px;
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 12px;
+        padding-block: 14px;
+      }
+      .brand { justify-self: center; }
+      .nav-links { gap: 26px; }
+      .nav-links a { font-size: 14px; }
+      .contact-container { padding: 116px 0 58px; }
+    }
+
+    @media (max-width: 560px) {
+      .nav-inner { min-height: 82px; }
+      .brand { font-size: 18px; }
+      .brand-mark { width: 21px; height: 21px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="site-nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-mark" src="assets/cairn-stone-mark-cropped.png" alt="" />
+          <span>CAIRN</span>
+        </a>
+        <ul class="nav-links" aria-label="Primary navigation">
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#about">About Us</a></li>
+          <li><a href="contact.html" class="active">Contact Us</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="contact-container">
+      <div class="contact-content">
+        <div class="contact-header">
+          <div class="section-kicker">Get in Touch</div>
+          <h1 class="section-title">Have a project in mind?<br />We’d <span class="accent-gold">love to hear</span> about it!</h1>
+        </div>
+
+        <div class="contact-success" id="contactSuccess">
+          <div class="contact-success-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h2 class="contact-success-title">Message Sent!</h2>
+          <p class="contact-success-text">Thank you! We've received your details and will reach out to you via text or call shortly.</p>
+          <a href="index.html" class="back-home">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Home
+          </a>
+        </div>
+
+        <form class="contact-form-container" id="contactForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="formName">Full Name</label>
+            <input class="form-input" type="text" id="formName" name="name" placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="formEmail">Email Address</label>
+            <input class="form-input" type="email" id="formEmail" name="email" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="formPhone">Phone Number</label>
+            <input class="form-input" type="tel" id="formPhone" name="phone" placeholder="(123) 456-7890" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="formMessage">Message</label>
+            <textarea class="form-input" id="formMessage" name="message" placeholder="Tell us about your project..." required></textarea>
+          </div>
+          <button class="btn" type="submit">
+            Send Message
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+          
+          <div style="text-align: center;">
+            <a href="index.html" class="back-home">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              Back to Home
+            </a>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/f2Izf3JTrchlIAwB065M/webhook-trigger/57862058-62a6-40a9-8f76-9afe4e100e9f';
+    const contactForm = document.getElementById('contactForm');
+    const contactSuccess = document.getElementById('contactSuccess');
+    const phoneInput = document.getElementById('formPhone');
+
+    // Dynamically format phone number: (XXX) XXX-XXXX
+    phoneInput.addEventListener('input', (e) => {
+      let inputVal = e.target.value.replace(/\D/g, ''); // strip non-numeric
+      if (inputVal.length > 10) {
+        inputVal = inputVal.substring(0, 10);
+      }
+      
+      const zip = inputVal.substring(0, 3);
+      const middle = inputVal.substring(3, 6);
+      const last = inputVal.substring(6, 10);
+
+      if (inputVal.length > 6) {
+        e.target.value = `(${zip}) ${middle}-${last}`;
+      } else if (inputVal.length > 3) {
+        e.target.value = `(${zip}) ${middle}`;
+      } else if (inputVal.length > 0) {
+        e.target.value = `(${zip}`;
+      } else {
+        e.target.value = '';
+      }
+    });
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('formName').value.trim();
+      const email = document.getElementById('formEmail').value.trim();
+      const phone = phoneInput.value.trim();
+      const message = document.getElementById('formMessage').value.trim();
+
+      // Basic validation check
+      if (!name || !email || !phone || !message) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      // Simple regex for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Phone validation (exactly 10 digits formatted: (123) 456-7890)
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (digitsOnly.length !== 10) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+
+      // Prepare payload
+      const payload = {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message,
+        source: window.location.hostname || 'Cairn Website'
+      };
+
+      // Send to GoHighLevel/Zapier webhook if configured
+      if (WEBHOOK_URL) {
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify(payload)
+        })
+        .then(response => {
+          if (!response.ok) {
+            console.error('Webhook submission error:', response.statusText);
+          }
+        })
+        .catch(err => {
+          console.error('Webhook connection failed:', err);
+        });
+      }
+
+      // Hide form & show success
+      contactForm.style.display = 'none';
+      contactSuccess.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
