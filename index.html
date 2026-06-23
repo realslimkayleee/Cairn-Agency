@@ -896,6 +896,114 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Contact Form Styles */
+    .contact-form-container {
+      max-width: 600px;
+      margin: 40px auto 0;
+      padding: 36px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 760;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(12, 15, 20, 0.12);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      transition: all 200ms ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--sage);
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(63, 149, 102, 0.15);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+      opacity: 0.65;
+    }
+
+    textarea.form-input {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-submit-btn {
+      width: 100%;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 10px;
+    }
+
+    .contact-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 24px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      max-width: 600px;
+      margin: 40px auto 0;
+      animation: fadeUp 500ms ease both;
+    }
+
+    .contact-success-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      color: var(--sage);
+      background: var(--sage-soft);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-success-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+
+    .contact-success-text {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 380px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
@@ -925,7 +1033,7 @@
             </h1>
             <p class="hero-subtext">We design modern, high-performing websites that help businesses stand out and grow more.</p>
             <div class="hero-actions">
-              <a href="mailto:inquiries@cairnagency.io" class="btn">
+              <a href="#contact" class="btn">
                 Contact Us
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -1076,12 +1184,41 @@
             <path d="M12 2c1.2 5.1 4 7.9 10 10-6 2.1-8.8 4.9-10 10-1.2-5.1-4-7.9-10-10 6-2.1 8.8-4.9 10-10Z" />
           </svg>
           <h2>Have a project in mind?<br />We’d <span class="accent-gold">love to hear</span> about it!</h2>
-          <a href="mailto:inquiries@cairnagency.io" class="btn">
-            Get in touch
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </a>
+          
+          <div class="contact-success" id="contactSuccess">
+            <div class="contact-success-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h3 class="contact-success-title">Message Sent!</h3>
+            <p class="contact-success-text">Thank you! We've received your details and will reach out to you via text or call shortly.</p>
+          </div>
+
+          <form class="contact-form-container" id="contactForm" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="formName">Full Name</label>
+              <input class="form-input" type="text" id="formName" name="name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="formEmail">Email Address</label>
+              <input class="form-input" type="email" id="formEmail" name="email" placeholder="john@example.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="formPhone">Phone Number</label>
+              <input class="form-input" type="tel" id="formPhone" name="phone" placeholder="(123) 456-7890" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="formMessage">Message</label>
+              <textarea class="form-input" id="formMessage" name="message" placeholder="Tell us about your project..." required></textarea>
+            </div>
+            <button class="btn form-submit-btn" type="submit">
+              Send Message
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </form>
         </div>
       </section>
     </main>
@@ -1104,6 +1241,108 @@
       item.style.transitionDelay = `${Math.min(index * 60, 260)}ms`;
       revealObserver.observe(item);
     });
+
+    // Form logic
+    const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/f2Izf3JTrchlIAwB065M/webhook-trigger/57862058-62a6-40a9-8f76-9afe4e100e9f';
+    const contactForm = document.getElementById('contactForm');
+    const contactSuccess = document.getElementById('contactSuccess');
+    const phoneInput = document.getElementById('formPhone');
+
+    // Dynamically format phone number: (XXX) XXX-XXXX
+    phoneInput.addEventListener('input', (e) => {
+      let inputVal = e.target.value.replace(/\D/g, ''); // strip non-numeric
+      if (inputVal.length > 10) {
+        inputVal = inputVal.substring(0, 10);
+      }
+      
+      const zip = inputVal.substring(0, 3);
+      const middle = inputVal.substring(3, 6);
+      const last = inputVal.substring(6, 10);
+
+      if (inputVal.length > 6) {
+        e.target.value = `(${zip}) ${middle}-${last}`;
+      } else if (inputVal.length > 3) {
+        e.target.value = `(${zip}) ${middle}`;
+      } else if (inputVal.length > 0) {
+        e.target.value = `(${zip}`;
+      } else {
+        e.target.value = '';
+      }
+    });
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('formName').value.trim();
+      const email = document.getElementById('formEmail').value.trim();
+      const phone = phoneInput.value.trim();
+      const message = document.getElementById('formMessage').value.trim();
+
+      // Basic validation check
+      if (!name || !email || !phone || !message) {
+        alert('Please fill out all fields.');
+        return;
+      }
+
+      // Simple regex for email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Phone validation (exactly 10 digits formatted: (123) 456-7890)
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (digitsOnly.length !== 10) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+
+      // Prepare payload
+      const payload = {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message,
+        source: window.location.hostname || 'Cairn Website'
+      };
+
+      // Send to GoHighLevel/Zapier webhook if configured
+      if (WEBHOOK_URL) {
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify(payload)
+        })
+        .then(response => {
+          if (!response.ok) {
+            console.error('Webhook submission error:', response.statusText);
+          }
+        })
+        .catch(err => {
+          console.error('Webhook connection failed:', err);
+        });
+      } else {
+        console.warn('Webhook URL not set. Data:', payload);
+      }
+
+      // Hide form & show success
+      contactForm.style.display = 'none';
+      contactSuccess.style.display = 'block';
+
+      // Open LeadConnector Chat Widget programmatically if loaded
+      if (window.leadConnector && window.leadConnector.chatWidget) {
+        setTimeout(() => {
+          window.leadConnector.chatWidget.openWidget();
+        }, 600);
+      }
+    });
   </script>
+
+  <!-- LeadConnector Chat Widget Script -->
+  <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a393a135755e5e7c23766ad" data-source="WEB_USER"></script>
 </body>
 </html>
