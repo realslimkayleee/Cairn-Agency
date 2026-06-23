@@ -389,6 +389,57 @@
         align-items: center;
       }
     }
+
+    /* Checkbox & Form Footer Styles */
+    .form-checkbox-group {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .checkbox-container {
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      margin-top: 3px;
+      cursor: pointer;
+      accent-color: var(--sage);
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(12, 15, 20, 0.12);
+      border-radius: 4px;
+    }
+
+    .checkbox-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .form-footer-legal {
+      margin-top: 24px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      border-top: 1px solid rgba(12, 15, 20, 0.06);
+      padding-top: 16px;
+    }
+
+    .form-footer-legal a {
+      color: var(--sage);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .form-footer-legal a:hover {
+      color: var(--lavender);
+    }
   </style>
 </head>
 <body>
@@ -448,15 +499,37 @@
             <label class="form-label" for="formMessage">Message</label>
             <textarea class="form-input" id="formMessage" name="message" placeholder="Tell us about your project..." required></textarea>
           </div>
+
+          <div class="form-checkbox-group">
+            <label class="checkbox-container">
+              <input type="checkbox" id="marketingConsent" name="marketingConsent" />
+              <span class="checkbox-text">I consent to receive marketing text messages from Cairn Agency at the phone number provided. Frequency may vary. Message & data rates may apply. Text HELP to (413) 266-5250 for assistance, reply STOP to opt out.</span>
+            </label>
+          </div>
+
+          <div class="form-checkbox-group">
+            <label class="checkbox-container">
+              <input type="checkbox" id="nonMarketingConsent" name="nonMarketingConsent" />
+              <span class="checkbox-text">I consent to receive non-marketing text messages from Cairn Agency about my project updates, appointment reminders etc. Message & data rates may apply.</span>
+            </label>
+          </div>
+
           <button class="btn" type="submit">
             Send Message
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
+
+          <div class="form-footer-legal">
+            By submitting this form, you agree to our 
+            <a href="https://www.leadconnectorhq.com/terms2" target="_blank" rel="noopener noreferrer">Terms of Service</a> 
+            and 
+            <a href="https://www.leadconnectorhq.com/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
+          </div>
           
-          <div style="text-align: center;">
-            <a href="index.html" class="back-home">
+          <div style="text-align: center; margin-top: 16px;">
+            <a href="index.html" class="back-home" style="margin-top: 0;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -544,12 +617,28 @@
         return;
       }
 
+      // Capture checkbox consent details
+      const marketingConsent = document.getElementById('marketingConsent').checked;
+      const nonMarketingConsent = document.getElementById('nonMarketingConsent').checked;
+
+      let smsConsentType = 'None';
+      if (marketingConsent && nonMarketingConsent) {
+        smsConsentType = 'Both';
+      } else if (marketingConsent) {
+        smsConsentType = 'Marketing Only';
+      } else if (nonMarketingConsent) {
+        smsConsentType = 'Non-Marketing Only';
+      }
+
       // Prepare payload
       const payload = {
         name: name,
         email: email,
         phone: phone,
         message: message,
+        marketingConsent: marketingConsent,
+        nonMarketingConsent: nonMarketingConsent,
+        smsConsentType: smsConsentType,
         source: window.location.hostname || 'Cairn Website'
       };
 
