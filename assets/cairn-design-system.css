@@ -1,0 +1,604 @@
+/* ============================================================
+   CAIRN AGENCY - DESIGN SYSTEM REFINEMENT LAYER
+   ============================================================
+
+   WHAT THIS FILE IS
+   A drop-in stylesheet that sits AFTER the existing <style>
+   block in index.html and corrects the design system without
+   touching any markup or copy.
+
+   HOW TO INSTALL (in execution order)
+   1. Save this file as /assets/cairn-design-system.css
+   2. In index.html, immediately BEFORE </head>, add:
+        <link rel="stylesheet" href="assets/cairn-design-system.css">
+   3. It must load AFTER the existing inline <style> block so
+      these rules win. Load order is what makes it work, not
+      !important.
+   4. Add the JavaScript from section 9 before </body>.
+   5. Hard refresh (Ctrl+Shift+R) and compare.
+
+   WHAT IT DOES NOT TOUCH
+   Brand colors, fonts, logo, squared button geometry, the grain
+   overlay, and all copy. Those are settled decisions.
+
+   JARGON, IN PLAIN ENGLISH
+   - "Token"    a named value reused everywhere, so one edit
+                changes the whole site.
+   - "rem"      a unit relative to the root font size (16px).
+                1rem = 16px. Used so text scales for users who
+                change their browser font size.
+   - "clamp()"  clamp(min, preferred, max). Lets a heading grow
+                with the screen but never past the limits.
+   - "Type scale" a fixed set of sizes generated from one
+                multiplier, so sizes relate to each other
+                instead of being picked by eye.
+   ============================================================ */
+
+
+/* ============================================================
+   1. TOKENS
+   Everything below is defined once here and referenced later.
+   ============================================================ */
+
+:root {
+
+  /* ---- TYPE SCALE ------------------------------------------
+     Base 16px, ratio 1.25 (the "major third").
+     Each step is the one below it multiplied by 1.25.
+     This replaces the 27 ad hoc font sizes currently in use.
+     Never introduce a size that is not on this list.
+  ----------------------------------------------------------- */
+  --step-n2:  0.64rem;   /* 10.24px  legal, footnotes         */
+  --step-n1:  0.80rem;   /* 12.8px   eyebrows, labels, meta    */
+  --step-0:   1.00rem;   /* 16px     body copy                 */
+  --step-1:   1.25rem;   /* 20px     lead paragraphs           */
+  --step-2:   1.563rem;  /* 25px     h4, card titles           */
+  --step-3:   1.953rem;  /* 31.25px  h3                        */
+  --step-4:   2.441rem;  /* 39px     h2 lower bound            */
+  --step-5:   3.052rem;  /* 48.8px   h2 upper bound            */
+  --step-6:   3.815rem;  /* 61px     h1 upper bound            */
+  --step-7:   5.960rem;  /* 95px     the single big stat       */
+
+  /* Fluid headings. Same 1.25 ratio at both ends, so the
+     relationship between h1 and h2 holds at every screen size.
+     This is the part that was broken: each old heading had its
+     own unrelated clamp. */
+  --type-h1: clamp(var(--step-4), 6vw,   var(--step-6));
+  --type-h2: clamp(var(--step-3), 4.5vw, var(--step-5));
+  --type-h3: clamp(var(--step-2), 3vw,   var(--step-4));
+  --type-lead: clamp(var(--step-1), 2.2vw, var(--step-2));
+
+  /* ---- LINE HEIGHT ----------------------------------------
+     Rule: the bigger the text, the tighter the leading.
+     Replaces 8 scattered values (0.9, 0.98, 1.0, 1.05, ...).
+  ----------------------------------------------------------- */
+  --lh-display: 1.02;   /* h1, h2, big stats */
+  --lh-heading: 1.15;   /* h3, h4, card titles */
+  --lh-body:    1.6;    /* paragraphs */
+  --lh-tight:   1.35;   /* dense UI rows, log lines */
+
+  /* ---- LETTER SPACING -------------------------------------
+     Three values only. Replaces 9.
+     Large type needs negative tracking to look correct.
+     Uppercase labels need positive tracking to stay legible.
+  ----------------------------------------------------------- */
+  --ls-display: -0.03em;
+  --ls-normal:   0;
+  --ls-label:    0.18em;
+
+  /* ---- WEIGHT ---------------------------------------------
+     800 was used 21 of 39 times, which flattens hierarchy and
+     reads loud rather than grounded. It is now reserved for
+     the hero and the closing call to action only.
+  ----------------------------------------------------------- */
+  --fw-body:    400;
+  --fw-medium:  500;
+  --fw-label:   600;
+  --fw-heading: 700;
+  --fw-hero:    800;
+
+  /* ---- SPACING, 8px GRID ----------------------------------
+     Replaces 13 padding values and 14 gap values.
+     Off grid values currently in use (6, 20, 28, 30, 50, 60)
+     are remapped below.
+  ----------------------------------------------------------- */
+  --sp-1:  0.25rem;  /*   4px */
+  --sp-2:  0.5rem;   /*   8px */
+  --sp-3:  1rem;     /*  16px */
+  --sp-4:  1.5rem;   /*  24px */
+  --sp-5:  2rem;     /*  32px */
+  --sp-6:  2.5rem;   /*  40px */
+  --sp-7:  3rem;     /*  48px */
+  --sp-8:  4rem;     /*  64px */
+  --sp-9:  5rem;     /*  80px */
+  --sp-10: 6rem;     /*  96px */
+  --sp-11: 8rem;     /* 128px */
+
+  /* ---- MOTION ---------------------------------------------
+     Your existing curve is good and is kept as the only curve.
+     Previously 4 of 10 transitions bypassed it and used
+     "ease", which is the browser default and reads generic.
+  ----------------------------------------------------------- */
+  --ease:      cubic-bezier(0.16, 1, 0.3, 1);  /* expo out */
+  --dur-fast:  150ms;
+  --dur:       250ms;
+  --dur-slow:  400ms;
+  --transition: all var(--dur) var(--ease);
+
+  /* ---- ELEVATION ------------------------------------------
+     One light source, directly above. Every shadow uses a
+     positive Y offset and no X offset, with alpha decreasing
+     as the shadow spreads. The old 3 shadows each implied a
+     different light direction and opacity, which is the most
+     common tell that a design was assembled, not designed.
+  ----------------------------------------------------------- */
+  --elev-1: 0 1px 2px rgba(0,0,0,0.10),
+            0 2px 6px rgba(0,0,0,0.06);
+  --elev-2: 0 2px 6px rgba(0,0,0,0.10),
+            0 10px 24px rgba(0,0,0,0.08);
+  --elev-3: 0 4px 12px rgba(0,0,0,0.10),
+            0 24px 56px rgba(0,0,0,0.10);
+  --elev-primary: 0 2px 6px rgba(45,139,87,0.20),
+                  0 12px 32px rgba(45,139,87,0.16);
+
+  /* ---- BREAKPOINTS (reference only) -----------------------
+     CSS cannot use variables inside @media, so these are
+     documented here and written literally below.
+     Old set had six: 600, 768, 900, 901, 960, 1060.
+     900 and 960 nearly collide, and 900/901 is a seam that
+     produces one dead pixel column of undefined behavior.
+     New set is three.
+  ----------------------------------------------------------- */
+  /* sm: 640px   md: 900px   lg: 1200px */
+}
+
+
+/* ============================================================
+   2. TYPE, APPLIED
+   Every heading is remapped onto the scale above.
+   Previously each section had its own unrelated size.
+   ============================================================ */
+
+.hero-section h1,
+.final-cta-box h2 {
+  font-size: var(--type-h1);
+  font-weight: var(--fw-hero);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+
+/* All seven section headings collapse to one size.
+   This is the single highest impact rule in the file. */
+.system-header-row h2,
+.case-content-col h2,
+.count-grid h2,
+.pricing-section h2,
+.faq-left-header h2,
+.problem-left-copy h2,
+.calc-inputs-side h2,
+.moment-section h2 {
+  font-size: var(--type-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+
+h3, .spec-title, .pricing-phase, .bio-name, .ledger-title {
+  font-size: var(--type-h3);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-normal);
+}
+
+.hero-sub,
+.pricing-intro,
+.system-header-intro,
+.moment-copy {
+  font-size: var(--type-lead);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+}
+
+/* Body copy. Was 15.5px, 15px, 14.5px, 14px, 13.5px, 13px
+   depending on which section you happened to be in. */
+body,
+.bio-text,
+.case-body-text,
+.spec-desc,
+.problem-left-copy p,
+.faq-content-inner {
+  font-size: var(--step-0);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+}
+
+/* Small supporting text. One size, not four. */
+.hero-cta-note,
+.spec-subtitle,
+.bio-role,
+.pricing-badge,
+.slider-label-row,
+.checklist-row {
+  font-size: var(--step-n1);
+  line-height: var(--lh-tight);
+}
+
+/* Uppercase labels. Tracking is what makes uppercase readable. */
+.eyebrow,
+.btn,
+.pricing-badge,
+.log-header {
+  font-size: var(--step-n1);
+  font-weight: var(--fw-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+
+/* Monospace numerals for anything in a ledger, log, or
+   calculator. Digits share one width so figures line up in a
+   column instead of jittering as values change. This is a
+   small change that reads as very expensive. */
+.log-timestamp,
+.ledger-hours-val,
+.slider-val-bubble,
+.calc-ledger-row .val,
+.moment-stat .num,
+.spec-num,
+.val {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: var(--ls-normal);
+}
+
+/* The one oversized stat. Kept deliberately large because a
+   single dominant number is a strong editorial device, but it
+   now sits on the scale instead of floating at 14vw. */
+.moment-stat .num {
+  font-size: clamp(var(--step-6), 12vw, var(--step-7));
+  font-weight: var(--fw-hero);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+
+/* ============================================================
+   3. SPACING, APPLIED
+   Off grid values remapped to the 8px grid.
+   ============================================================ */
+
+.section-padding { padding-block: var(--sp-10); }   /* was 120 */
+
+.container { width: min(100% - var(--sp-5), 1200px); }
+
+.eyebrow      { margin-bottom: var(--sp-4); }        /* was 20 */
+.hero-section h1,
+.final-cta-box h2 { margin-bottom: var(--sp-4); }
+.case-content-col h2,
+.pricing-section h2 { margin-bottom: var(--sp-5); }  /* was 30 */
+
+.hero-section {
+  padding-top: var(--sp-11);                          /* was 180 */
+  padding-bottom: var(--sp-10);
+}
+
+.btn { padding: var(--sp-3) var(--sp-5); }            /* was 16/32 */
+
+/* Grid gaps. Was 60, 40, 30, 28, 20, 12, 6 mixed freely. */
+.hero-grid,
+.problem-grid,
+.case-grid,
+.moment-grid   { gap: var(--sp-8); }                  /* was 60 */
+.system-header-row,
+.calc-box      { gap: var(--sp-6); }                  /* was 40 */
+.spec-row,
+.pricing-features,
+.checklist-row { gap: var(--sp-3); }                  /* was 12 */
+.log-row,
+.ledger-row    { gap: var(--sp-2); }                  /* was 6 */
+
+.pricing-card  { padding: var(--sp-5); }              /* was 30 */
+.ledger-card,
+.log-panel,
+.bio-card,
+.calc-box      { padding: var(--sp-6); }              /* was 36/50 */
+
+
+/* ============================================================
+   4. ELEVATION, APPLIED
+   ============================================================ */
+
+.ledger-card,
+.log-panel      { box-shadow: var(--elev-2); }
+.pricing-card   { box-shadow: var(--elev-1); }
+.calc-box,
+.bio-card       { box-shadow: var(--elev-3); }
+.btn-primary:hover { box-shadow: var(--elev-primary); }
+
+
+/* ============================================================
+   5. MOTION, APPLIED
+   Every transition routed through the one curve.
+   "all" is replaced with named properties, because animating
+   "all" forces the browser to watch every property and is a
+   measurable performance cost.
+   ============================================================ */
+
+.btn,
+.nav-cta-btn,
+.linkedin-btn {
+  transition: background-color var(--dur) var(--ease),
+              border-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+
+.btn:hover,
+.nav-cta-btn:hover { transform: translateY(-2px); }
+.btn:active        { transform: translateY(0); }
+
+.faq-trigger { transition: color var(--dur) var(--ease); }
+.faq-content { transition: max-height var(--dur-slow) var(--ease),
+                           opacity var(--dur) var(--ease); }
+
+.pricing-card,
+.spec-row {
+  transition: transform var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.pricing-card:hover { transform: translateY(-4px); box-shadow: var(--elev-3); }
+
+.site-header {
+  transition: background-color var(--dur) var(--ease),
+              box-shadow var(--dur) var(--ease);
+}
+
+
+/* ============================================================
+   6. ENTRANCE MOTION
+   The site currently has zero animation declarations, which is
+   why it feels identical to a static screenshot. These are
+   deliberately small. Motion that announces itself reads cheap.
+   Requires the JavaScript in section 9.
+   ============================================================ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-slow) var(--ease),
+              transform var(--dur-slow) var(--ease);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered children, for grids and lists. Each item starts
+   60ms after the one before it. */
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-slow) var(--ease),
+              transform var(--dur-slow) var(--ease);
+}
+[data-reveal-stagger].is-visible > * { opacity: 1; transform: none; }
+[data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 60ms; }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 120ms; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 180ms; }
+[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 240ms; }
+
+
+/* ============================================================
+   7. GRAPHICS LAYER
+   All vector and gradient based, no image files. This keeps
+   Lighthouse performance at or near 100 and means nothing to
+   art direct, license, or wait on.
+
+   The visual language is drawn from what a cairn actually is:
+   a stack of stones marking a trail. Topographic contour lines
+   and stone forms, nothing generic or technological.
+   ============================================================ */
+
+/* 7a. Topographic contour field.
+   Sits behind dark sections at very low opacity. Reads as
+   texture rather than as a pattern you can name, which is the
+   intent. Elevation lines suit a construction and trail brand
+   and avoid the circuit board and network node cliche that
+   every other AI company uses. */
+.hero-section,
+.case-section,
+.final-cta-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-section::before,
+.case-section::before,
+.final-cta-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23AEC3AE' stroke-width='1.1'%3E%3Cpath d='M-40 620 Q 160 560 340 600 T 720 540 T 900 580'/%3E%3Cpath d='M-40 560 Q 160 496 340 540 T 720 476 T 900 520'/%3E%3Cpath d='M-40 500 Q 160 432 340 480 T 720 412 T 900 460'/%3E%3Cpath d='M-40 440 Q 160 368 340 420 T 720 348 T 900 400'/%3E%3Cpath d='M-40 380 Q 160 304 340 360 T 720 284 T 900 340'/%3E%3Cpath d='M-40 320 Q 160 240 340 300 T 720 220 T 900 280'/%3E%3Cpath d='M-40 260 Q 160 176 340 240 T 720 156 T 900 220'/%3E%3Cpath d='M-40 200 Q 160 112 340 180 T 720 92 T 900 160'/%3E%3Cpath d='M-40 140 Q 160 48 340 120 T 720 28 T 900 100'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 1000px 1000px;
+  background-position: center bottom;
+  background-repeat: repeat;
+}
+
+/* 7b. Hero depth wash.
+   A single soft sage light source in the upper right, which
+   matches the light direction implied by the elevation system
+   in section 1. Gives the hero dimension without an image. */
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 78% 12%,
+      rgba(174,195,174,0.13) 0%,
+      rgba(174,195,174,0.05) 38%,
+      transparent 72%),
+    radial-gradient(ellipse 90% 60% at 20% 95%,
+      rgba(45,139,87,0.10) 0%,
+      transparent 65%);
+}
+
+/* 7c. Stone stack section divider.
+   A drawn cairn, used to mark major section transitions. This
+   is a supporting motif and is deliberately not the logo. The
+   existing stonemark in the nav stays the only logo usage. */
+.section-padding + .section-padding::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 44px;
+  margin: 0 auto var(--sp-8);
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='44' viewBox='0 0 34 44'%3E%3Cg fill='none' stroke='%23C9982E' stroke-width='1.4' stroke-linejoin='round'%3E%3Cpath d='M5 40 q12 -5 24 0 q-2 3 -12 3 t-12 -3z'/%3E%3Cpath d='M7 33 q10 -6 20 0 q-3 4 -10 4 t-10 -4z'/%3E%3Cpath d='M9.5 25.5 q7.5 -6 15 0 q-3 4 -7.5 4 t-7.5 -4z'/%3E%3Cpath d='M12 18 q5 -5 10 0 q-2 3 -5 3 t-5 -3z'/%3E%3Cpath d='M14 11.5 q3 -4 6 0 q-1.5 2.5 -3 2.5 t-3 -2.5z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+}
+
+/* 7d. Hairline rules.
+   Section seams at 1px with low alpha. Cheap to add, and the
+   absence of any seam is part of why sections currently run
+   together. */
+.section-padding + .section-padding {
+  border-top: 1px solid rgba(247,244,236,0.08);
+}
+
+/* 7e. Refined grain.
+   Your existing .noise-overlay is kept. Adding a blend mode
+   makes the grain sit in the image rather than on top of it,
+   which is the difference between texture and a gray film. */
+.noise-overlay {
+  mix-blend-mode: overlay;
+  opacity: 0.05;
+}
+
+/* 7f. Reserved slot for the VSL and answer videos.
+   Not active yet. When the videos are ready, wrap each one in
+   <div class="video-frame"> and it will inherit the system. */
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--panel-dark);
+  box-shadow: var(--elev-3);
+  border: 1px solid rgba(247,244,236,0.10);
+}
+.video-frame > video,
+.video-frame > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+
+/* ============================================================
+   8. ACCESSIBILITY AND RESPONSIVE
+   ============================================================ */
+
+/* Respects the operating system setting for users who get
+   motion sickness from animation. Currently missing entirely,
+   and it is a scored Lighthouse item. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Focus ring. You already have :focus-visible, this makes it
+   consistent and visible against both the dark and cream
+   backgrounds. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Three breakpoints, replacing six. */
+@media (max-width: 900px) {
+  .section-padding { padding-block: var(--sp-8); }
+  .hero-section {
+    padding-top: var(--sp-10);
+    padding-bottom: var(--sp-8);
+  }
+  .hero-grid,
+  .problem-grid,
+  .case-grid,
+  .moment-grid { gap: var(--sp-6); }
+  .calc-box,
+  .bio-card,
+  .ledger-card,
+  .log-panel { padding: var(--sp-5); }
+}
+
+@media (max-width: 640px) {
+  .section-padding { padding-block: var(--sp-7); }
+  .container { width: min(100% - var(--sp-4), 1200px); }
+  .btn { width: 100%; }
+  .section-padding + .section-padding::before { margin-bottom: var(--sp-6); }
+}
+
+
+/* ============================================================
+   9. REQUIRED JAVASCRIPT
+   Paste this immediately before </body> in index.html.
+   It adds the .is-visible class when an element scrolls into
+   view, which is what triggers section 6.
+
+   Copy everything between the two comment markers.
+
+   <!-- CAIRN REVEAL START -->
+   <script>
+   (function () {
+     var sel = '[data-reveal], [data-reveal-stagger]';
+     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+     var nodes = document.querySelectorAll(sel);
+     if (reduce || !('IntersectionObserver' in window)) {
+       nodes.forEach(function (n) { n.classList.add('is-visible'); });
+       return;
+     }
+     var io = new IntersectionObserver(function (entries) {
+       entries.forEach(function (e) {
+         if (e.isIntersecting) {
+           e.target.classList.add('is-visible');
+           io.unobserve(e.target);
+         }
+       });
+     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+     nodes.forEach(function (n) { io.observe(n); });
+   })();
+   </script>
+   <!-- CAIRN REVEAL END -->
+
+   THEN add the attributes to the markup. Minimum useful set:
+     <section class="problem-section ..." data-reveal>
+     <section class="system-section ..." data-reveal>
+     <div class="spec-table" data-reveal-stagger>
+     <div class="moment-grid" data-reveal>
+     <div class="case-grid" data-reveal>
+     <div class="pricing-cards-wrap" data-reveal-stagger>
+     <div class="faq-list" data-reveal-stagger>
+
+   Do NOT put data-reveal on the hero. Content above the fold
+   should never fade in. It delays the first thing the visitor
+   came to read and hurts the Largest Contentful Paint score.
+   ============================================================ */

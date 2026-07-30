@@ -1386,6 +1386,15 @@
       color: var(--cream);
     }
   </style>
+
+  <!-- Design system refinement layer. Must load after the inline
+       styles above so its rules win. See assets/cairn-design-system.css -->
+  <link rel="stylesheet" href="assets/cairn-design-system.css">
+
+  <!-- Tech layer. Comment out this one line to A/B against the
+       previous editorial version. -->
+  <link rel="stylesheet" href="assets/cairn-tech-layer.css">
+  <link rel="stylesheet" href="assets/cairn-polish.css">
 </head>
 <body>
   
@@ -1406,6 +1415,7 @@
           <li><a href="#proof">Proof</a></li>
           <li><a href="#hours">Your Hours</a></li>
           <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#about">About</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li class="mobile-nav-cta">
             <a href="https://calendly.com/kingkaylee41/cairn-agency-walkthrough" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; text-align: center;">Book a Walkthrough</a>
@@ -1465,19 +1475,9 @@
       </div>
     </section>
 
-    <!-- Client Strip -->
-    <div class="client-strip">
-      <div class="client-strip-inner">
-        <span>BUILT FOR OWNER-OPERATORS ·</span>
-        <span>Firehouse Pools ·</span>
-        <span>DF Cleaning ·</span>
-        <span>H.I.L Detailing ·</span>
-        <span>Gleam Clean</span>
-      </div>
-    </div>
 
     <!-- Problem Section -->
-    <section class="problem-section section-padding" id="problem">
+    <section class="problem-section section-padding" id="problem" data-reveal>
       <div class="container problem-grid">
         <div class="problem-left-copy">
           A lead came in through your website yesterday afternoon. Nobody called them back — and you already know that job probably went to <span class="underlined">the guy down the road who answered his phone.</span>
@@ -1492,14 +1492,14 @@
     </section>
 
     <!-- The System Section -->
-    <section class="system-section section-padding" id="system">
+    <section class="system-section section-padding" id="system" data-reveal>
       <div class="container">
         <div class="system-header-row">
           <h2>One system. It learns your business.</h2>
           <p class="system-header-intro">Not another app your office manager has to babysit. Cairn is built for you, trained on how you talk, what you build, and how your jobs actually flow — and it gets sharper the longer it runs. You approve everything before it goes live. We handle the rest.</p>
         </div>
 
-        <div class="spec-table">
+        <div class="spec-table" data-reveal-stagger>
           <div class="spec-row">
             <span class="spec-num">01</span>
             <div class="spec-title-wrap">
@@ -1550,7 +1550,7 @@
 
     <!-- "60 Seconds" Moment Section -->
     <section class="moment-section">
-      <div class="container moment-grid">
+      <div class="container moment-grid" data-reveal>
         <div class="moment-stat">
           <span class="num">60</span>
           <span class="word">seconds.</span>
@@ -1561,7 +1561,7 @@
 
     <!-- Case Study Section -->
     <section class="case-section section-padding" id="proof">
-      <div class="container case-grid">
+      <div class="container case-grid" data-reveal>
         <div class="case-content-col">
           <span class="eyebrow">ON THE RECORD</span>
           <h2>Firehouse Pools stopped letting five-figure builds go to voicemail.</h2>
@@ -1593,34 +1593,11 @@
       </div>
     </section>
 
-    <!-- Founder Section (Preserved Verbatim) -->
-    <section class="founder-section section-padding" id="about">
-      <div class="container">
-        <article class="bio-card">
-          <div class="bio-photo-wrap">
-            <img src="assets/kaylee_photo.jpg" alt="Kaylee King" />
-          </div>
-          <div class="bio-content">
-            <h3 class="bio-name">Kaylee King</h3>
-            <div class="bio-roles">
-              <span class="bio-role">Full Stack Developer</span>
-              <span class="bio-role">E-Commerce Specialist</span>
-              <span class="bio-role">Project Manager</span>
-            </div>
-            <p class="bio-text">Software engineer and builder at heart, Kaylee brings over six years of full-stack development experience spanning L3Harris, the U.S. Air Force Academy, UT Dallas, and her own SaaS venture, Dwllo. At Cairn, she pairs deep technical foundation with sharp project leadership.</p>
-            <a href="https://www.linkedin.com/in/kaylee-king-965b44276" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
-              <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              View on LinkedIn
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
 
     <!-- Calculator Section -->
     <section class="calc-section section-padding" id="hours">
       <div class="container">
-        <div class="calc-box">
+        <div class="calc-box" data-reveal>
           <div class="calc-inputs-side">
             <h2>Calculate Your Leak</h2>
             <p>Slide the values to match your business metrics and see how many hours slip through your workflows monthly.</p>
@@ -1675,16 +1652,48 @@
             <!-- Visual Cairns Stones Meter -->
             <div class="calc-meter-container">
               <svg class="calc-meter-svg" viewBox="0 0 200 200">
-                <!-- Stone 5 (Base) -->
-                <path id="calc-stone-5" d="M 30,160 C 30,140 70,135 100,135 C 130,135 170,140 170,160 C 170,180 130,185 100,185 C 70,185 30,180 30,160 Z" />
-                <!-- Stone 4 -->
-                <path id="calc-stone-4" d="M 45,120 C 45,105 75,100 100,100 C 125,100 155,105 155,120 C 155,135 125,140 100,140 C 75,140 45,135 45,120 Z" />
-                <!-- Stone 3 -->
-                <path id="calc-stone-3" d="M 60,85 C 60,73 80,70 100,70 C 120,70 140,73 140,85 C 140,97 120,100 100,100 C 80,100 60,97 60,85 Z" />
-                <!-- Stone 2 -->
-                <path id="calc-stone-2" d="M 75,55 C 75,45 88,43 102,43 C 116,43 125,45 125,55 C 125,65 116,67 102,67 C 88,67 75,65 75,55 Z" />
-                <!-- Stone 1 (Top) -->
-                <path id="calc-stone-1" d="M 85,30 C 85,20 92,18 100,18 C 108,18 115,20 115,30 C 115,40 108,42 100,42 C 92,42 85,40 85,30 Z" />
+                <defs>
+                  <filter id="stoneShadow" x="-30%" y="-30%" width="160%" height="170%">
+                    <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.55"/>
+                  </filter>
+                  <linearGradient id="stoneSheen" x1="0" y1="0" x2="0.35" y2="1">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.34"/>
+                    <stop offset="45%" stop-color="#FFFFFF" stop-opacity="0.07"/>
+                    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                  </linearGradient>
+                  <linearGradient id="stoneBase" x1="0" y1="0" x2="0.2" y2="1">
+                    <stop offset="0%" stop-color="#000000" stop-opacity="0"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0.42"/>
+                  </linearGradient>
+                </defs>
+
+                <g class="stone-stack" filter="url(#stoneShadow)">
+                  <!-- Stone 5 (Base). Irregular silhouettes, weighted and
+                       asymmetric like real river stone rather than ellipses. -->
+                  <path id="calc-stone-5" d="M27,161 C25,144 49,134 84,132 C121,130 170,136 174,155 C178,174 145,187 101,188 C58,189 29,178 27,161 Z"/>
+                  <path class="stone-lit" d="M27,161 C25,144 49,134 84,132 C121,130 170,136 174,155 C160,143 128,138 100,139 C67,140 40,148 27,161 Z" fill="url(#stoneSheen)"/>
+                  <path class="stone-shade" d="M27,161 C40,176 66,187 101,188 C145,187 178,174 174,155 C166,171 137,180 100,181 C63,182 36,173 27,161 Z" fill="url(#stoneBase)"/>
+
+                  <!-- Stone 4 -->
+                  <path id="calc-stone-4" d="M43,122 C41,109 64,100 95,99 C127,98 158,104 159,118 C160,133 128,141 99,141 C70,141 45,134 43,122 Z"/>
+                  <path class="stone-lit" d="M43,122 C41,109 64,100 95,99 C127,98 158,104 159,118 C147,109 122,105 98,106 C71,107 53,113 43,122 Z" fill="url(#stoneSheen)"/>
+                  <path class="stone-shade" d="M43,122 C53,133 73,141 99,141 C128,141 160,133 159,118 C152,129 128,136 99,136 C70,136 51,131 43,122 Z" fill="url(#stoneBase)"/>
+
+                  <!-- Stone 3 -->
+                  <path id="calc-stone-3" d="M58,87 C56,76 75,69 98,68 C122,67 142,72 142,84 C142,96 120,101 98,101 C75,101 60,97 58,87 Z"/>
+                  <path class="stone-lit" d="M58,87 C56,76 75,69 98,68 C122,67 142,72 142,84 C133,77 116,74 98,74 C77,74 66,80 58,87 Z" fill="url(#stoneSheen)"/>
+                  <path class="stone-shade" d="M58,87 C64,96 78,101 98,101 C120,101 142,96 142,84 C136,93 119,97 98,97 C77,97 64,94 58,87 Z" fill="url(#stoneBase)"/>
+
+                  <!-- Stone 2 -->
+                  <path id="calc-stone-2" d="M73,56 C72,46 85,41 101,41 C118,41 127,45 127,55 C127,65 116,69 100,69 C85,69 74,66 73,56 Z"/>
+                  <path class="stone-lit" d="M73,56 C72,46 85,41 101,41 C118,41 127,45 127,55 C120,49 111,46 100,46 C87,46 79,50 73,56 Z" fill="url(#stoneSheen)"/>
+                  <path class="stone-shade" d="M73,56 C75,65 86,69 100,69 C116,69 127,65 127,55 C123,62 113,66 100,66 C86,66 77,63 73,56 Z" fill="url(#stoneBase)"/>
+
+                  <!-- Stone 1 (Top) -->
+                  <path id="calc-stone-1" d="M84,30 C83,21 90,16 100,16 C111,16 117,20 117,29 C117,38 110,43 100,43 C90,43 85,39 84,30 Z"/>
+                  <path class="stone-lit" d="M84,30 C83,21 90,16 100,16 C111,16 117,20 117,29 C112,23 107,21 100,21 C92,21 88,25 84,30 Z" fill="url(#stoneSheen)"/>
+                  <path class="stone-shade" d="M84,30 C85,39 91,43 100,43 C110,43 117,38 117,29 C114,36 108,40 100,40 C92,40 87,37 84,30 Z" fill="url(#stoneBase)"/>
+                </g>
               </svg>
             </div>
 
@@ -1746,14 +1755,10 @@
     </section>
 
     <!-- Pricing Section -->
-    <section class="pricing-section section-padding" id="pricing">
+    <section class="pricing-section section-padding" id="pricing" data-reveal>
       <div class="container">
         <h2>Built in phases. Each one proves itself before the next.</h2>
-        <div class="pricing-callout">
-          <strong>One honest thing up front:</strong> this system runs on the leads and work you already have. We don't sell new leads, traffic, or revenue promises — and we put that in writing. New demand only enters at Phase 3, once your system has proven it converts.
-        </div>
-
-        <div class="pricing-grid">
+        <div class="pricing-grid" data-reveal-stagger>
           <!-- Phase 1 -->
           <div class="pricing-card">
             <div class="pricing-card-header">
@@ -1812,6 +1817,34 @@
       </div>
     </section>
 
+    <!-- Founder Section (Preserved Verbatim) -->
+    <section class="founder-section section-padding" id="about" data-reveal>
+      <div class="container">
+        <div class="about-header">
+          <span class="eyebrow">ABOUT US</span>
+          <h2>Who you are actually working with.</h2>
+          <p class="about-intro">Cairn is small on purpose. You work directly with the person who builds your system, not an account manager two layers removed from the work.</p>
+        </div>
+        <article class="bio-card" data-reveal>
+          <div class="bio-photo-wrap">
+            <img src="assets/kaylee_photo.jpg" alt="Kaylee King" />
+          </div>
+          <div class="bio-content">
+            <h3 class="bio-name">Kaylee King</h3>
+            <div class="bio-roles">
+              <span class="bio-role">Full Stack Developer</span>
+              <span class="bio-role">Project Manager</span>
+            </div>
+            <p class="bio-text">Software engineer and builder at heart, Kaylee brings over six years of full-stack development experience spanning L3Harris, the U.S. Air Force Academy, UT Dallas, and her own SaaS venture, Dwllo. At Cairn, she pairs deep technical foundation with sharp project leadership.</p>
+            <a href="https://www.linkedin.com/in/kaylee-king-965b44276" target="_blank" rel="noopener noreferrer" class="linkedin-btn">
+              <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              View on LinkedIn
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <!-- FAQ Section -->
     <section class="faq-section section-padding" id="faq">
       <div class="container faq-grid">
@@ -1819,7 +1852,7 @@
           <h2>Fair questions.</h2>
         </div>
 
-        <div class="faq-list">
+        <div class="faq-list" data-reveal-stagger>
           <div class="faq-item">
             <button class="faq-trigger">Will this sound like a robot to my customers?</button>
             <div class="faq-content">
@@ -1887,7 +1920,7 @@
     </section>
 
     <!-- Final CTA Section -->
-    <section class="final-cta-section section-padding">
+    <section class="final-cta-section section-padding" data-reveal>
       <div class="container final-cta-box">
         <span class="eyebrow">BOOK A WALKTHROUGH</span>
         <h2>Every week of slow response is jobs going to the guy who answered first.</h2>
@@ -2053,6 +2086,111 @@
     // Run initial calculation
     calculate();
   </script>
+
+  <!-- CAIRN REVEAL START -->
+  <script>
+  (function () {
+    var sel = '[data-reveal], [data-reveal-stagger]';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var nodes = document.querySelectorAll(sel);
+    if (reduce || !('IntersectionObserver' in window)) {
+      nodes.forEach(function (n) { n.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+    nodes.forEach(function (n) { io.observe(n); });
+  })();
+  </script>
+  <!-- CAIRN REVEAL END -->
+
+  <!-- CAIRN TECH START -->
+  <script>
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Count-up on the headline stat. Skips the calculator,
+    // which computes its own values live.
+    var els = document.querySelectorAll('.moment-stat .num');
+    els.forEach(function (el) {
+      var raw = el.textContent.trim();
+      var m = raw.match(/^([^0-9]*)([0-9][0-9,\.]*)(.*)$/);
+      if (!m) return;
+      var pre = m[1], post = m[3];
+      var target = parseFloat(m[2].replace(/,/g, ''));
+      if (isNaN(target)) return;
+      var decimals = (m[2].split('.')[1] || '').length;
+      if (reduce) return;
+      var done = false;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting || done) return;
+          done = true;
+          var start = performance.now(), dur = 1400;
+          function tick(now) {
+            var p = Math.min((now - start) / dur, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            var v = (target * eased).toFixed(decimals);
+            el.textContent = pre + Number(v).toLocaleString(undefined,
+              { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + post;
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          io.disconnect();
+        });
+      }, { threshold: 0.4 });
+      io.observe(el);
+    });
+
+    // Header solidifies once you scroll past the hero.
+    var header = document.getElementById('siteHeader');
+    if (header) {
+      var onScroll = function () {
+        header.classList.toggle('is-scrolled', window.scrollY > 40);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    // Pointer-reactive 3D tilt and light sweep on cards.
+    // Skipped entirely on touch devices and for reduced motion.
+    var fine = window.matchMedia('(pointer: fine)').matches;
+    if (!reduce && fine) {
+      var cards = document.querySelectorAll('.spec-row, .pricing-card');
+      cards.forEach(function (card) {
+        var raf = null;
+        card.addEventListener('pointermove', function (ev) {
+          if (raf) return;
+          raf = requestAnimationFrame(function () {
+            raf = null;
+            var r = card.getBoundingClientRect();
+            var px = (ev.clientX - r.left) / r.width;
+            var py = (ev.clientY - r.top) / r.height;
+            card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+            card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+            var ry = (px - 0.5) * 7;    // degrees, deliberately small
+            var rx = (0.5 - py) * 7;
+            card.style.transform =
+              'perspective(1400px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' +
+              ry.toFixed(2) + 'deg) translateY(-6px)';
+          });
+        });
+        card.addEventListener('pointerleave', function () {
+          card.style.transform = '';
+          card.style.removeProperty('--mx');
+          card.style.removeProperty('--my');
+        });
+      });
+    }
+  })();
+  </script>
+  <!-- CAIRN TECH END -->
 
   <!-- LeadConnector Chat Widget Script -->
   <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a3ad02f105532eae1537d68" data-source="WEB_USER"></script>

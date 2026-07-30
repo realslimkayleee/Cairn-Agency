@@ -1,0 +1,993 @@
+/* ============================================================
+   CAIRN AGENCY - POLISH LAYER
+   ============================================================
+   Loads after cairn-tech-layer.css. Targeted refinements from
+   review, kept in their own file so any single one is easy to
+   find and reverse.
+
+   1. Topographic field restored in the hero
+   2. Day-30 Ledger rows to full white
+   3. System cards: last row centered
+   4. Founder card animated
+   5. Calculator: visible slider track, animated panel
+   6. Phase cards separated and animated
+   7. FAQ cards animated
+   8. Book a Walkthrough animated
+   ============================================================ */
+
+
+/* ============================================================
+   1. TOPOGRAPHIC FIELD, BACK IN THE HERO
+   Layered over the aurora rather than replacing it, and masked
+   so it fades toward the middle of the section. The page grid
+   stays as it is, so the hero now has both: contour lines for
+   character, grid for precision.
+   ============================================================ */
+
+.hero-section { position: relative; isolation: isolate; }
+
+/* HERO: ENGINEERING GRAPH PAPER
+   Replaces both the contour waves and the histogram. Two grids
+   stacked: a fine 14px field and a heavier 98px major division,
+   plus lit nodes at the major intersections. Blueprint language,
+   which is the contractor's own visual world, rendered in the
+   site's greens rather than drafting blue.
+   Drifts very slowly so it reads as alive without motion you
+   have to consciously watch. */
+.hero-section::before {
+  display: block !important;
+  content: "" !important;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1 !important;
+  background-image:
+    /* lit nodes at major intersections */
+    radial-gradient(circle at 0 0, rgba(120,235,180,0.42) 0.8px, transparent 1.9px),
+    /* major divisions */
+    linear-gradient(to right,  rgba(95,224,160,0.155) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(95,224,160,0.155) 1px, transparent 1px),
+    /* fine field */
+    linear-gradient(to right,  rgba(174,195,174,0.070) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(174,195,174,0.070) 1px, transparent 1px) !important;
+  background-size:
+    98px 98px,
+    98px 98px,
+    98px 98px,
+    14px 14px,
+    14px 14px;
+  background-position: 0 0;
+  -webkit-mask-image: radial-gradient(ellipse 92% 82% at 42% 52%, #000 12%, rgba(0,0,0,0.55) 52%, transparent 88%);
+          mask-image: radial-gradient(ellipse 92% 82% at 42% 52%, #000 12%, rgba(0,0,0,0.55) 52%, transparent 88%);
+  animation: cairn-blueprint 60s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes cairn-blueprint {
+  0%   { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 98px 98px, 98px 98px, 98px 98px, 98px 98px, 98px 98px; }
+}
+
+
+/* ============================================================
+   2. DAY-30 LEDGER: FULL WHITE
+   Labels were at 60 to 85 percent alpha, which read gray.
+   ============================================================ */
+
+.ledger-card .ledger-row span,
+.ledger-card .ledger-row,
+.ledger-hours-val {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.ledger-card .ledger-row span:last-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.ledger-hours-val {
+  color: #FFFFFF !important;
+  text-shadow: 0 0 26px rgba(55,169,106,0.45);
+}
+
+.ledger-title { color: rgba(255,255,255,0.55) !important; }
+
+
+/* ============================================================
+   3. SYSTEM CARDS: CENTER THE LAST ROW
+   Five cards in a three-column grid left the last two hanging
+   left. Flex with wrap centers any incomplete row automatically,
+   so this stays correct if a sixth card is ever added.
+   ============================================================ */
+
+.spec-table {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--sp-4);
+}
+
+.spec-row {
+  flex: 0 1 calc(33.333% - var(--sp-4));
+  min-width: 300px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .spec-row { flex: 0 1 calc(50% - var(--sp-4)); }
+}
+@media (max-width: 700px) {
+  .spec-row { flex: 1 1 100%; min-width: 0; }
+}
+
+
+/* ============================================================
+   4. FOUNDER CARD: ANIMATED
+   Was completely static. Adds an ambient float, a rotating
+   conic light around the photo, a slow zoom on the photo, and
+   a sweep across the card on hover.
+   ============================================================ */
+
+.bio-card {
+  position: relative;
+  overflow: hidden;
+  animation: cairn-float 9s ease-in-out infinite;
+  transition: transform 420ms var(--ease),
+              box-shadow 420ms var(--ease),
+              border-color 420ms var(--ease);
+}
+
+@keyframes cairn-float {
+  0%, 100% { transform: translateY(0);      }
+  50%      { transform: translateY(-7px);   }
+}
+
+.bio-card:hover {
+  animation-play-state: paused;
+  transform: translateY(-9px);
+  border-color: var(--line-bright) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 40px 90px rgba(0,0,0,0.55),
+    0 0 90px -26px var(--glow-green) !important;
+}
+
+/* Sweep across the card on hover. */
+.bio-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -60%;
+  width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent 0%,
+    rgba(255,255,255,0.07) 50%, transparent 100%);
+  transform: skewX(-16deg);
+  transition: left 900ms var(--ease);
+  pointer-events: none;
+  z-index: 2;
+}
+.bio-card:hover::after { left: 130%; }
+
+/* Rotating conic ring around the photo. */
+.bio-photo-wrap {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bio-photo-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  background: conic-gradient(from 0deg,
+    rgba(55,169,106,0.85),
+    rgba(174,195,174,0.20),
+    rgba(201,152,46,0.55),
+    rgba(55,169,106,0.85));
+  animation: cairn-spin 11s linear infinite;
+}
+
+@keyframes cairn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.bio-photo-wrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease), filter 600ms var(--ease);
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.bio-card:hover .bio-photo-wrap img {
+  transform: scale(1.06);
+  filter: saturate(1.05) contrast(1.06);
+}
+
+/* Role chips get a lit edge. */
+.bio-role {
+  border: 1px solid var(--line) !important;
+  background: rgba(55,169,106,0.10) !important;
+  color: var(--text-mid) !important;
+  transition: border-color 280ms var(--ease),
+              background-color 280ms var(--ease),
+              color 280ms var(--ease);
+}
+.bio-card:hover .bio-role {
+  border-color: rgba(55,169,106,0.45) !important;
+  background: rgba(55,169,106,0.16) !important;
+  color: var(--text-hi) !important;
+}
+
+
+/* ============================================================
+   5. CALCULATOR: VISIBLE TRACK, LIVE PANEL
+   The slider track was invisible because accent-color alone
+   does not paint a track on an unstyled range input. Now
+   explicitly drawn for both WebKit and Firefox.
+   ============================================================ */
+
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  background: transparent !important;
+  cursor: pointer;
+}
+
+/* WebKit and Blink */
+.range-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+    rgba(55,169,106,0.75) 0%,
+    rgba(174,195,174,0.45) 55%,
+    rgba(174,195,174,0.22) 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,0.55),
+    0 0 14px rgba(55,169,106,0.22);
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px; height: 20px;
+  margin-top: -7.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #EAF6EF 0%, #3BB073 55%, #2D8B57 100%);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.5),
+    0 0 0 0 rgba(55,169,106,0.45),
+    0 0 18px rgba(55,169,106,0.55);
+  transition: box-shadow 240ms var(--ease), transform 240ms var(--ease);
+}
+
+.range-slider:hover::-webkit-slider-thumb { transform: scale(1.12); }
+.range-slider:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.55),
+    0 0 0 9px rgba(55,169,106,0.16),
+    0 0 26px rgba(55,169,106,0.7);
+}
+
+/* Firefox */
+.range-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+    rgba(55,169,106,0.75) 0%,
+    rgba(174,195,174,0.45) 55%,
+    rgba(174,195,174,0.22) 100%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.55);
+}
+.range-slider::-moz-range-progress {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--primary-hover);
+}
+.range-slider::-moz-range-thumb {
+  width: 19px; height: 19px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: radial-gradient(circle at 35% 30%, #EAF6EF 0%, #3BB073 55%, #2D8B57 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 0 18px rgba(55,169,106,0.55);
+}
+
+/* Panel now breathes and carries a slow travelling edge light. */
+.calc-box {
+  position: relative;
+  animation: cairn-breathe 7s ease-in-out infinite;
+}
+
+@keyframes cairn-breathe {
+  0%, 100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      0 40px 90px rgba(0,0,0,0.55),
+      0 0 80px -42px var(--glow-green);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.10),
+      0 44px 100px rgba(0,0,0,0.58),
+      0 0 120px -30px var(--glow-green);
+  }
+}
+
+/* Travelling highlight along the top edge. */
+.calc-box::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  height: 1px; width: 38%;
+  background: linear-gradient(90deg, transparent,
+    rgba(120,230,175,0.95), transparent);
+  animation: cairn-edge 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@keyframes cairn-edge {
+  0%   { transform: translateX(-100%); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(330%);  opacity: 0; }
+}
+
+/* Output values pop slightly as they change. */
+.calc-outputs-side .val,
+.calc-ledger-row .val {
+  color: #FFFFFF !important;
+  font-variant-numeric: tabular-nums;
+  transition: color 200ms var(--ease), text-shadow 200ms var(--ease);
+  text-shadow: 0 0 20px rgba(55,169,106,0.35);
+}
+
+.calc-outputs-side { position: relative; overflow: hidden; }
+.calc-outputs-side::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 40% at 50% 0%,
+    rgba(55,169,106,0.12) 0%, transparent 70%);
+}
+
+
+/* ============================================================
+   6. PHASE CARDS: SEPARATED AND ANIMATED
+   Gap was 1px, which fused them into one slab.
+   ============================================================ */
+
+.pricing-grid {
+  gap: var(--sp-5) !important;
+  background: transparent !important;
+  align-items: stretch;
+}
+
+.pricing-card {
+  position: relative;
+  overflow: hidden;
+  animation: cairn-float 10s ease-in-out infinite;
+}
+.pricing-card:nth-child(2) { animation-delay: -3.3s; }
+.pricing-card:nth-child(3) { animation-delay: -6.6s; }
+.pricing-card:hover { animation-play-state: paused; }
+
+/* Accent bar along the top of each phase. */
+.pricing-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%, var(--primary-hover) 45%,
+    rgba(174,195,174,0.6) 70%, transparent 100%);
+  transform: scaleX(0.25);
+  transform-origin: left;
+  transition: transform 520ms var(--ease);
+}
+.pricing-card:hover::before { transform: scaleX(1); }
+
+/* Hover sweep. */
+.pricing-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -60%;
+  width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent 0%,
+    rgba(255,255,255,0.06) 50%, transparent 100%);
+  transform: skewX(-16deg);
+  transition: left 850ms var(--ease);
+  pointer-events: none;
+}
+.pricing-card:hover::after { left: 130%; }
+
+/* The recommended phase sits slightly forward. */
+.pricing-card.highlighted {
+  transform: translateY(-10px);
+  z-index: 2;
+}
+.pricing-card.highlighted:hover { transform: translateY(-16px); }
+
+.pricing-badge {
+  background: linear-gradient(180deg, #3BB073 0%, var(--primary) 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 16px rgba(45,139,87,0.4);
+}
+
+@media (max-width: 900px) {
+  .pricing-card.highlighted,
+  .pricing-card.highlighted:hover { transform: none; }
+}
+
+
+/* ============================================================
+   7. FAQ CARDS: ANIMATED
+   ============================================================ */
+
+.faq-item {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 320ms var(--ease),
+    border-color 320ms var(--ease),
+    transform 320ms var(--ease),
+    box-shadow 320ms var(--ease);
+}
+
+.faq-item::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    var(--primary-hover) 0%, rgba(174,195,174,0.45) 70%, transparent 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 420ms var(--ease);
+}
+
+.faq-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.35),
+              0 0 44px -22px var(--glow-sage);
+}
+.faq-item:hover::before { transform: scaleY(1); }
+
+.faq-trigger {
+  transition: color 240ms var(--ease), letter-spacing 240ms var(--ease);
+}
+.faq-trigger:hover { color: #FFFFFF !important; }
+
+/* Open state, if the markup toggles an .active or [open] class. */
+.faq-item.active::before,
+.faq-item[open]::before { transform: scaleY(1); }
+.faq-item.active,
+.faq-item[open] {
+  background: rgba(42,47,42,0.55) !important;
+  border-color: var(--line-bright) !important;
+}
+
+
+/* ============================================================
+   8. BOOK A WALKTHROUGH: ANIMATED CLOSE
+   ============================================================ */
+
+.final-cta-section { position: relative; overflow: hidden; }
+
+.final-cta-section::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 44% 46% at 50% 52%, rgba(55,169,106,0.20) 0%, transparent 66%),
+    radial-gradient(ellipse 38% 40% at 22% 30%, rgba(174,195,174,0.12) 0%, transparent 68%);
+  filter: blur(48px);
+  animation: cairn-aurora-cta 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes cairn-aurora-cta {
+  0%   { transform: translate3d(-3%, 1%, 0) scale(1);    }
+  100% { transform: translate3d( 3%, -2%, 0) scale(1.12); }
+}
+
+.final-cta-box {
+  position: relative;
+  animation: cairn-breathe-soft 8s ease-in-out infinite;
+}
+
+@keyframes cairn-breathe-soft {
+  0%, 100% { filter: drop-shadow(0 0 40px rgba(55,169,106,0.10)); }
+  50%      { filter: drop-shadow(0 0 70px rgba(55,169,106,0.22)); }
+}
+
+.final-cta-box h2 {
+  background: linear-gradient(180deg, #FFFFFF 0%, #AEC3AE 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ============================================================
+   9. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-section::before,
+  .bio-card,
+  .bio-photo-wrap::before,
+  .calc-box,
+  .calc-box::before,
+  .pricing-card,
+  .final-cta-section::after,
+  .final-cta-box {
+    animation: none !important;
+  }
+  .bio-card::after,
+  .pricing-card::after { display: none !important; }
+  .pricing-card.highlighted { transform: none !important; }
+}
+
+
+/* ============================================================
+   10. HERO: LIVE DATA VISUALIZATION
+   A real SVG telemetry graph rather than a gradient. The line
+   draws itself, a comet runs the path, nodes fire in sequence,
+   an activity histogram breathes underneath, and a scan bar
+   sweeps across. On-message as well as decorative: it is a
+   system recovering lead volume over time.
+   ============================================================ */
+
+.hero-viz {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 46%;
+  z-index: -1;
+  pointer-events: none;
+  overflow: visible;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+          mask-image: linear-gradient(180deg, transparent 0%, #000 34%, #000 100%);
+}
+
+/* REMOVED from the hero, per review: the rising trajectory line,
+   its area fill, the comet, the vertex nodes, the travelling dot,
+   the dashed baseline, and the scanning light bar. What remains
+   is the activity histogram, which is futuristic without being
+   either wavy or a trend line.
+
+   The histogram is now the whole hero visual, so it is bigger,
+   brighter, and better resolved than when it was a supporting
+   layer. Twenty-four columns breathing at four different speeds
+   that never resync, each with a lit cap. Reads as a live system
+   monitor. */
+
+.cv-bar {
+  fill: url(#cvColumn);
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: cv-bar 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes cv-bar {
+  0%   { transform: scaleY(0.22); opacity: 0.55; }
+  100% { transform: scaleY(1);    opacity: 1;    }
+}
+
+/* Four cycle lengths, deliberately non-harmonic so the pattern
+   does not visibly repeat. */
+.cv-bar:nth-child(3n)   { animation-duration: 4.4s; animation-delay: -1.1s; }
+.cv-bar:nth-child(3n+1) { animation-duration: 3.1s; animation-delay: -2.3s; }
+.cv-bar:nth-child(4n)   { animation-duration: 5.2s; animation-delay: -0.7s; }
+.cv-bar:nth-child(5n)   { animation-duration: 2.8s; animation-delay: -1.9s; }
+.cv-bar:nth-child(7n)   { animation-duration: 6.1s; animation-delay: -3.4s; }
+
+
+/* ============================================================
+   11. GLOBAL GREEN GLOW
+   The luminous green from the 60-second band, lifted out of
+   that one section and applied across the whole page.
+   ============================================================ */
+
+body::before {
+  background:
+    radial-gradient(ellipse 52% 34% at 18% 5%,  rgba(55,169,106,0.30) 0%, transparent 70%),
+    radial-gradient(ellipse 46% 28% at 84% 18%, rgba(174,195,174,0.15) 0%, transparent 72%),
+    radial-gradient(ellipse 58% 28% at 10% 40%, rgba(55,169,106,0.24) 0%, transparent 72%),
+    radial-gradient(ellipse 50% 26% at 90% 56%, rgba(45,139,87,0.22) 0%, transparent 74%),
+    radial-gradient(ellipse 62% 30% at 28% 76%, rgba(55,169,106,0.26) 0%, transparent 72%),
+    radial-gradient(ellipse 48% 26% at 78% 94%, rgba(45,139,87,0.20) 0%, transparent 74%) !important;
+}
+
+/* A persistent green wash pinned to the viewport, so the glow
+   is present no matter where you are on the page. */
+body {
+  position: relative;
+}
+body > .cairn-glow,
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 108%, rgba(55,169,106,0.22) 0%, transparent 68%),
+    radial-gradient(ellipse 80% 44% at 50% -8%,  rgba(55,169,106,0.16) 0%, transparent 66%);
+  animation: cairn-glow-pulse 11s ease-in-out infinite alternate;
+}
+@keyframes cairn-glow-pulse {
+  0%   { opacity: 0.75; }
+  100% { opacity: 1;    }
+}
+
+
+/* ============================================================
+   12. ANIMATED SECTION BACKGROUNDS
+   "Nobody called" and "One system" were static. Each gets its
+   own drifting light, feathered wide so it reads as ambient
+   rather than as a panel boundary.
+   ============================================================ */
+
+.problem-section,
+.system-section,
+.case-section,
+.count-section,
+.faq-section {
+  position: relative;
+  isolation: isolate;
+}
+
+.problem-section::after,
+.system-section::after,
+.case-section::after,
+.count-section::after,
+.faq-section::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(54px);
+  will-change: transform;
+}
+
+.problem-section::after {
+  background:
+    radial-gradient(ellipse 40% 44% at 24% 34%, rgba(55,169,106,0.20) 0%, transparent 66%),
+    radial-gradient(ellipse 36% 40% at 80% 70%, rgba(201,152,46,0.10) 0%, transparent 68%);
+  animation: cairn-drift-a 21s ease-in-out infinite alternate;
+}
+
+.system-section::after {
+  background:
+    radial-gradient(ellipse 44% 42% at 72% 26%, rgba(55,169,106,0.24) 0%, transparent 66%),
+    radial-gradient(ellipse 38% 40% at 18% 74%, rgba(174,195,174,0.14) 0%, transparent 68%);
+  animation: cairn-drift-b 24s ease-in-out infinite alternate;
+}
+
+.case-section::after {
+  background: radial-gradient(ellipse 46% 44% at 34% 50%, rgba(55,169,106,0.20) 0%, transparent 68%);
+  animation: cairn-drift-a 26s ease-in-out infinite alternate;
+}
+
+.count-section::after {
+  background: radial-gradient(ellipse 44% 42% at 66% 44%, rgba(55,169,106,0.18) 0%, transparent 68%);
+  animation: cairn-drift-b 23s ease-in-out infinite alternate;
+}
+
+.faq-section::after {
+  background: radial-gradient(ellipse 42% 44% at 28% 58%, rgba(55,169,106,0.17) 0%, transparent 68%);
+  animation: cairn-drift-a 25s ease-in-out infinite alternate;
+}
+
+@keyframes cairn-drift-a {
+  0%   { transform: translate3d(-4%, -2%, 0) scale(1);    }
+  100% { transform: translate3d( 5%,  3%, 0) scale(1.14); }
+}
+@keyframes cairn-drift-b {
+  0%   { transform: translate3d( 4%,  2%, 0) scale(1.10); }
+  100% { transform: translate3d(-5%, -3%, 0) scale(1);    }
+}
+
+
+/* ============================================================
+   13. FOOTER
+   Was still on the old --bg-dark charcoal, which reads gray
+   against the deeper field the rest of the page now sits on.
+   ============================================================ */
+
+.site-footer {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-top: 1px solid var(--line) !important;
+  color: var(--text-lo) !important;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Green bloom at the very bottom removed. The footer is just
+   the footer now. */
+.site-footer::after { content: none !important; }
+
+.site-footer a { color: var(--text-mid) !important; transition: color 240ms var(--ease); }
+.site-footer a:hover { color: #FFFFFF !important; }
+.footer-brand-text { color: var(--text-hi) !important; }
+.footer-nav a:hover { color: #FFFFFF !important; }
+
+
+/* ============================================================
+   14. REDUCED MOTION, SECTIONS 10 TO 13
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-base, .cv-comet, .cv-node, .cv-bar, .cv-scan,
+  .problem-section::after, .system-section::after,
+  .case-section::after, .count-section::after,
+  .faq-section::after, .site-footer::after, html::after {
+    animation: none !important;
+  }
+  .cv-line { stroke-dashoffset: 0; animation: none !important; }
+  .cv-area { opacity: 1; animation: none !important; }
+  .cv-scan, .cv-comet { opacity: 0 !important; }
+  .cv-dot  { display: none !important; }
+}
+
+
+/* ============================================================
+   15. CAIRN STONE METER, REFINED
+   The stones were five near identical ellipses with a flat fill
+   and a hairline, which is why they read as drawn on. Silhouettes
+   are now irregular and asymmetric like real stacked river stone,
+   and each carries a lit cap and a shaded underside so it has
+   volume. Fill is still driven by the original active-stone
+   rules, so the calculator logic is untouched.
+   ============================================================ */
+
+.calc-meter-svg { width: 150px; height: 172px; overflow: visible; }
+
+.calc-meter-svg path {
+  stroke: rgba(174,195,174,0.16) !important;
+  stroke-width: 0.9 !important;
+  transition: fill 520ms var(--ease),
+              stroke 520ms var(--ease),
+              opacity 520ms var(--ease) !important;
+}
+
+/* Lighting overlays must never take the stroke or the fill
+   transitions meant for the stone bodies. */
+.calc-meter-svg .stone-lit,
+.calc-meter-svg .stone-shade {
+  stroke: none !important;
+  pointer-events: none;
+}
+
+.calc-meter-svg .stone-lit   { opacity: 0.5; }
+.calc-meter-svg .stone-shade { opacity: 0.75; }
+
+/* Inactive stones sit back rather than disappearing. */
+.calc-meter-svg path[id^="calc-stone"] {
+  fill: rgba(174,195,174,0.055) !important;
+}
+
+.calc-meter-svg path.active-stone {
+  stroke: rgba(233,245,236,0.55) !important;
+  stroke-width: 1.1 !important;
+}
+
+.calc-meter-svg path#calc-stone-5.active-stone { fill: #AEC3AE !important; }
+.calc-meter-svg path#calc-stone-4.active-stone { fill: #9BB59B !important; }
+.calc-meter-svg path#calc-stone-3.active-stone { fill: #86A386 !important; }
+.calc-meter-svg path#calc-stone-2.active-stone { fill: #6F8E6F !important; }
+.calc-meter-svg path#calc-stone-1.active-stone { fill: #5C7A5C !important; }
+
+.stone-stack { filter: url(#stoneShadow) drop-shadow(0 0 22px rgba(55,169,106,0.20)); }
+
+
+/* ============================================================
+   16. ABOUT US HEADER
+   ============================================================ */
+
+.about-header {
+  max-width: 760px;
+  margin: 0 auto var(--sp-8);
+  text-align: center;
+}
+
+.about-header .eyebrow { margin-bottom: var(--sp-3); }
+
+.about-header h2 {
+  font-size: var(--type-h2);
+  font-weight: var(--fw-heading);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--text-hi) !important;
+  margin-bottom: var(--sp-4);
+}
+
+.about-intro {
+  font-size: var(--type-lead);
+  line-height: var(--lh-body);
+  color: var(--text-mid) !important;
+}
+
+
+/* ============================================================
+   17. THE CAIRN WORDMARK
+   Was Poppins 800 at a tight default tracking, which at 16px
+   reads heavy and generic rather than considered. A wordmark
+   at small size wants the opposite: lighter weight, wide and
+   even tracking, and optical correction for the trailing
+   letter space that tracking adds after the final N.
+   ============================================================ */
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  text-decoration: none;
+}
+
+.nav-brand span {
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.34em !important;
+  padding-right: 0.34em;          /* cancels the trailing track */
+  color: #F4F7F1 !important;
+  transition: color 300ms var(--ease), letter-spacing 420ms var(--ease);
+}
+
+.nav-brand:hover span {
+  color: #FFFFFF !important;
+  letter-spacing: 0.40em !important;
+}
+
+/* Hairline rule between the stonemark and the word, which is
+   what makes a lockup read as designed rather than assembled. */
+.nav-brand-img {
+  height: 26px;
+  width: auto;
+  padding-right: var(--sp-3);
+  border-right: 1px solid var(--line-bright);
+}
+
+
+/* ============================================================
+   18. FAQ TO FINAL CTA SEAM
+   The closing section carried a much stronger, tighter aurora
+   than its neighbour, so the join was visible. Both are now on
+   the same scale and intensity, and the FAQ glow is pulled
+   downward so the two overlap through the seam.
+   ============================================================ */
+
+.faq-section::after {
+  background: radial-gradient(ellipse 52% 54% at 34% 74%,
+    rgba(55,169,106,0.19) 0%, transparent 70%) !important;
+  inset: -25% -25% -45% -25% !important;
+}
+
+.final-cta-section::after {
+  inset: -45% -25% -25% -25% !important;
+  background:
+    radial-gradient(ellipse 54% 52% at 50% 30%, rgba(55,169,106,0.19) 0%, transparent 70%),
+    radial-gradient(ellipse 44% 44% at 22% 66%, rgba(174,195,174,0.10) 0%, transparent 70%) !important;
+  filter: blur(58px) !important;
+}
+
+/* The closing box no longer pulses, which was reading as a
+   separate object sitting on top of the page. */
+.final-cta-box { animation: none !important; }
+
+
+/* ============================================================
+   19. REDUCED MOTION, SECTIONS 15 TO 18
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-section::before { animation: none !important; }
+  .nav-brand:hover span { letter-spacing: 0.34em !important; }
+}
+
+
+/* ============================================================
+   20. NAVIGATION TYPE, MATCHED TO THE WORDMARK
+   Nav links were Poppins 600 at 0.08em tracking, which is a
+   different voice from the wordmark beside them. They now use
+   the same treatment: lighter weight, open even tracking, and
+   an underline that draws on hover instead of a colour jump.
+   Tracking is 0.20em rather than the wordmark's 0.30em because
+   these are multi-word labels and need to stay readable.
+   ============================================================ */
+
+.nav-links-wrap a {
+  font-family: var(--font-display) !important;
+  font-weight: 500 !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.20em !important;
+  color: rgba(238,241,235,0.62) !important;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 300ms var(--ease);
+  white-space: nowrap;
+}
+
+.nav-links-wrap a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 100%;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    var(--primary-hover) 0%, rgba(174,195,174,0.65) 100%);
+  transition: right 420ms var(--ease);
+}
+
+.nav-links-wrap a:hover {
+  color: #FFFFFF !important;
+}
+.nav-links-wrap a:hover::after { right: 0; }
+
+/* The trailing letter-space pushes each label optically right.
+   Cancelling it keeps the gaps between items even. */
+.nav-links-wrap > li > a { margin-right: -0.20em; }
+.nav-links-wrap { gap: 34px !important; }
+
+/* Mobile drawer keeps the type but drops the underline. */
+@media (max-width: 900px) {
+  .nav-links-wrap a { font-size: 13px !important; }
+  .nav-links-wrap a::after { display: none; }
+}
+
+
+/* ============================================================
+   21. WORDMARK, SCALED UP
+   CAIRN is five letters. At 15px it disappeared next to the
+   nav links. Larger size wants slightly tighter tracking, so
+   this drops from 0.34em to 0.30em as it grows.
+   ============================================================ */
+
+.nav-brand {
+  gap: var(--sp-4) !important;
+}
+
+.nav-brand span {
+  font-size: 26px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.30em !important;
+  padding-right: 0.30em;
+}
+
+.nav-brand:hover span {
+  letter-spacing: 0.34em !important;
+}
+
+.nav-brand-img {
+  width: auto !important;
+  height: 36px !important;
+  padding-right: var(--sp-4);
+}
+
+@media (max-width: 900px) {
+  .nav-brand span { font-size: 21px !important; }
+  .nav-brand-img  { height: 30px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-brand:hover span { letter-spacing: 0.30em !important; }
+}

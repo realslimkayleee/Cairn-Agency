@@ -1,0 +1,567 @@
+/* ============================================================
+   CAIRN AGENCY - TECH LAYER v2
+   ============================================================
+   Changes from v1:
+   1. Every remaining cream surface caught, including
+      .calc-inputs-side which was the white block in the
+      "Calculate Your Leak" section.
+   2. Section seams removed. The page is now one continuous
+      gradient field instead of eleven bounded blocks.
+   3. The System section rebuilt from a bordered spec sheet
+      into elevated 3D cards.
+   4. Real depth: perspective, layered translucency, rim light,
+      and pointer-reactive tilt.
+   ============================================================ */
+
+:root {
+  --surface-0: #121412;
+  --surface-1: #171A17;
+  --surface-2: rgba(32, 36, 32, 0.55);
+  --surface-3: rgba(42, 47, 42, 0.62);
+
+  --line:        rgba(174, 195, 174, 0.10);
+  --line-bright: rgba(174, 195, 174, 0.24);
+
+  --glow-green: rgba(55, 169, 106, 0.50);
+  --glow-sage:  rgba(174, 195, 174, 0.32);
+
+  --text-hi:  #EEF1EB;
+  --text-mid: rgba(238, 241, 235, 0.74);
+  --text-lo:  rgba(238, 241, 235, 0.46);
+}
+
+
+/* ============================================================
+   1. KILL THE PAPER SIGNALS
+   ============================================================ */
+
+.noise-overlay { display: none !important; }
+
+.section-padding + .section-padding::before {
+  content: none !important;
+}
+
+
+/* ============================================================
+   2. FLUIDITY: ONE CONTINUOUS FIELD
+   Previously every section painted its own background and drew
+   a 1px rule at the seam, which is what made the boundaries so
+   obvious. Now all sections are transparent and the color lives
+   on a single fixed backdrop behind the whole page. Scrolling
+   moves content through light rather than between panels.
+   ============================================================ */
+
+html { background: var(--surface-0); }
+
+body {
+  background: var(--surface-0);
+  position: relative;
+}
+
+/* The field. Fixed, so it does not scroll with content. Large
+   heavily feathered blooms mean color changes continuously
+   instead of at a seam. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -3;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 32% at 18% 6%,  rgba(45,139,87,0.20) 0%, transparent 70%),
+    radial-gradient(ellipse 46% 28% at 84% 20%, rgba(174,195,174,0.11) 0%, transparent 72%),
+    radial-gradient(ellipse 55% 26% at 12% 44%, rgba(55,169,106,0.13) 0%, transparent 72%),
+    radial-gradient(ellipse 48% 26% at 88% 62%, rgba(123,94,167,0.10) 0%, transparent 74%),
+    radial-gradient(ellipse 60% 30% at 30% 84%, rgba(45,139,87,0.14) 0%, transparent 72%),
+    radial-gradient(ellipse 44% 24% at 76% 96%, rgba(201,152,46,0.07) 0%, transparent 74%);
+  filter: blur(30px);
+  animation: cairn-field 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes cairn-field {
+  0%   { transform: translate3d(-1.5%, -1%, 0) scale(1);    }
+  100% { transform: translate3d( 1.5%,  1%, 0) scale(1.06); }
+}
+
+/* A single drifting technical grid across the entire page,
+   replacing the per-section grids. One texture, not five. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,  var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 76px 76px;
+  opacity: 0.55;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 15%, transparent 82%);
+          mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 15%, transparent 82%);
+  animation: cairn-grid-drift 40s linear infinite;
+}
+
+@keyframes cairn-grid-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 76px 76px; }
+}
+
+/* Every section goes transparent and loses its seam. This is
+   the core of the "fluid, no obvious sections" fix. */
+.hero-section,
+.problem-section,
+.system-section,
+.case-section,
+.founder-section,
+.calc-section,
+.count-section,
+.pricing-section,
+.faq-section,
+.final-cta-section,
+.client-strip {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.hero-section::before,
+.hero-section::after,
+.case-section::before,
+.final-cta-section::before,
+.system-section::before {
+  content: none !important;
+}
+
+/* The green stat band is the one place a zone change is
+   wanted. Feathered top and bottom so it bleeds rather than
+   butts against its neighbours. */
+.moment-section {
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(45,139,87,0.16) 22%,
+    rgba(45,139,87,0.20) 50%,
+    rgba(45,139,87,0.16) 78%,
+    transparent 100%) !important;
+  border: 0 !important;
+}
+.moment-stat .word { color: var(--text-hi) !important; }
+
+
+/* ============================================================
+   3. EVERY REMAINING LIGHT SURFACE AND DARK TEXT
+   This is the "Calculate Your Leak" fix. .calc-inputs-side had
+   its own cream background that v1 missed.
+   ============================================================ */
+
+.calc-box,
+.calc-inputs-side,
+.ledger-card,
+.pricing-grid {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* The calculator, rebuilt as one glass instrument panel. */
+.calc-box {
+  background: linear-gradient(155deg,
+      rgba(38,43,38,0.72) 0%,
+      rgba(24,27,24,0.78) 100%) !important;
+  border: 1px solid var(--line-bright) !important;
+  backdrop-filter: blur(20px) saturate(130%);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
+    0 40px 90px rgba(0,0,0,0.55),
+    0 0 90px -40px var(--glow-green) !important;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+.calc-inputs-side {
+  background: transparent !important;
+  color: var(--text-mid) !important;
+}
+
+.calc-outputs-side {
+  background: rgba(12,14,12,0.55) !important;
+  border-left: 1px solid var(--line) !important;
+  color: var(--text-hi) !important;
+}
+
+@media (max-width: 900px) {
+  .calc-outputs-side {
+    border-left: 0 !important;
+    border-top: 1px solid var(--line) !important;
+  }
+}
+
+.ledger-card {
+  background: linear-gradient(155deg,
+      rgba(38,43,38,0.66) 0%,
+      rgba(22,25,22,0.74) 100%) !important;
+  border: 1px solid var(--line-bright) !important;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    0 34px 76px rgba(0,0,0,0.5),
+    0 0 70px -34px var(--glow-sage) !important;
+}
+
+/* Blanket text flip. Anything that was hardcoded dark. */
+.problem-section, .problem-left-copy, .problem-right-col p,
+.problem-right-col strong, .system-section, .system-header-intro,
+.calc-section, .calc-inputs-side, .calc-inputs-side p,
+.count-section, .count-grid .intro-lead, .faq-section,
+.faq-content-inner, .ledger-title, .spec-desc, .spec-subtitle,
+.slider-label-row, .calc-footnote {
+  color: var(--text-mid) !important;
+}
+
+.problem-section h1, .problem-section h2, .problem-section h3,
+.system-header-row h2, .calc-inputs-side h2, .faq-left-header h2,
+.count-grid h2, .spec-title, .faq-trigger, .problem-right-col strong,
+.pricing-phase, .bio-name, .ledger-hours-val {
+  color: var(--text-hi) !important;
+}
+
+.calc-footnote, .ledger-title, .spec-subtitle { color: var(--text-lo) !important; }
+
+.faq-item, .spec-row { border-color: var(--line) !important; }
+.pricing-grid { gap: 1px; }
+
+
+/* ============================================================
+   4. THE SYSTEM SECTION, REBUILT AS 3D CARDS
+   Was: a bordered spec sheet, 80px/280px/1fr columns with a
+   hairline under each row. That is a printed table.
+   Now: floating glass cards in a responsive grid, each with a
+   ghosted index numeral, a cut corner, and pointer tilt.
+   ============================================================ */
+
+.spec-table {
+  border-top: 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  gap: var(--sp-4);
+  perspective: 1400px;
+}
+
+.spec-row {
+  display: block !important;
+  position: relative;
+  padding: var(--sp-6) var(--sp-5) var(--sp-5) !important;
+  border: 1px solid var(--line) !important;
+  border-bottom: 1px solid var(--line) !important;
+  background: linear-gradient(158deg,
+      rgba(40,45,40,0.58) 0%,
+      rgba(20,23,20,0.68) 100%) !important;
+  backdrop-filter: blur(16px) saturate(125%);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 18px 44px rgba(0,0,0,0.42);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition:
+    transform 320ms var(--ease),
+    border-color 320ms var(--ease),
+    box-shadow 320ms var(--ease);
+  will-change: transform;
+}
+
+/* Ghosted index numeral behind the content. */
+.spec-row .spec-num {
+  position: absolute !important;
+  top: 6px; right: 22px;
+  font-size: 76px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  color: transparent !important;
+  background: linear-gradient(180deg,
+      rgba(174,195,174,0.22) 0%,
+      rgba(174,195,174,0.02) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  text-shadow: none !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+.spec-title-wrap { position: relative; z-index: 1; margin-bottom: var(--sp-3); }
+.spec-desc       { position: relative; z-index: 1; }
+
+.spec-title {
+  font-size: var(--step-1) !important;
+  letter-spacing: 0.01em;
+}
+
+/* Accent bar that grows on hover. */
+.spec-row::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg,
+    var(--primary-hover) 0%,
+    rgba(174,195,174,0.5) 55%,
+    transparent 100%);
+  transform: scaleY(0.18);
+  transform-origin: top;
+  transition: transform 420ms var(--ease);
+}
+
+/* Light sweep that follows the pointer. Coordinates are set by
+   the JavaScript in section 8. */
+.spec-row::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms var(--ease);
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(55,169,106,0.16) 0%,
+    transparent 62%);
+}
+
+.spec-row:hover {
+  border-color: var(--line-bright) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    0 30px 70px rgba(0,0,0,0.52),
+    0 0 70px -26px var(--glow-green);
+}
+.spec-row:hover::before { transform: scaleY(1); }
+.spec-row:hover::after  { opacity: 1; }
+
+
+/* ============================================================
+   5. DEPTH EVERYWHERE ELSE
+   ============================================================ */
+
+.pricing-grid, .faq-list { perspective: 1400px; }
+
+.log-panel, .bio-card, .pricing-card {
+  background: linear-gradient(158deg,
+      rgba(38,43,38,0.56) 0%,
+      rgba(19,22,19,0.68) 100%) !important;
+  border: 1px solid var(--line) !important;
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 24px 60px rgba(0,0,0,0.48) !important;
+  transform-style: preserve-3d;
+  transition: transform 320ms var(--ease),
+              box-shadow 320ms var(--ease),
+              border-color 320ms var(--ease);
+}
+
+.pricing-card {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+.pricing-card:hover {
+  border-color: var(--line-bright) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    0 36px 84px rgba(0,0,0,0.55),
+    0 0 72px -24px var(--glow-sage) !important;
+}
+
+.pricing-card.highlighted {
+  border-color: rgba(55,169,106,0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 40px 96px rgba(0,0,0,0.58),
+    0 0 90px -28px var(--glow-green) !important;
+}
+
+.faq-item {
+  background: rgba(30,34,30,0.34) !important;
+  border: 1px solid var(--line) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  margin-bottom: var(--sp-2);
+  transition: background-color 280ms var(--ease),
+              border-color 280ms var(--ease);
+}
+.faq-item:hover {
+  background: rgba(38,43,38,0.5) !important;
+  border-color: var(--line-bright) !important;
+}
+.faq-trigger { padding: var(--sp-4) var(--sp-4) !important; }
+.faq-content-inner { padding: 0 var(--sp-4) var(--sp-4) !important; }
+
+
+/* ============================================================
+   6. BUTTONS, NAV, INSTRUMENTATION
+   ============================================================ */
+
+.btn, .nav-cta-btn { position: relative; overflow: hidden; isolation: isolate; }
+
+.btn::after, .nav-cta-btn::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -140%;
+  width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent 0%,
+    rgba(255,255,255,0.22) 50%, transparent 100%);
+  transform: skewX(-18deg);
+  transition: left 620ms var(--ease);
+  pointer-events: none;
+}
+.btn:hover::after, .nav-cta-btn:hover::after { left: 140%; }
+
+.btn-primary {
+  background: linear-gradient(180deg, #3BB073 0%, var(--primary) 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 8px 22px rgba(45,139,87,0.32) !important;
+}
+.btn-primary:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    0 12px 34px rgba(45,139,87,0.44),
+    0 0 54px -8px var(--glow-green) !important;
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  border-color: var(--line-bright) !important;
+  background: rgba(255,255,255,0.03) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.btn-ghost:hover {
+  border-color: rgba(55,169,106,0.7) !important;
+  box-shadow: 0 0 40px -12px var(--glow-green) !important;
+}
+
+.site-header {
+  background: rgba(18,20,18,0.55) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid transparent !important;
+  transition: background-color 280ms var(--ease),
+              border-color 280ms var(--ease);
+}
+.site-header.is-scrolled {
+  background: rgba(14,16,14,0.86) !important;
+  border-bottom-color: var(--line) !important;
+}
+
+.client-strip { border-block: 1px solid var(--line) !important; }
+
+.range-slider { accent-color: var(--primary-hover); }
+.slider-val-bubble {
+  background: rgba(55,169,106,0.16) !important;
+  border: 1px solid var(--line-bright) !important;
+  color: var(--text-hi) !important;
+}
+
+.moment-stat .num {
+  background: linear-gradient(180deg, #FFFFFF 0%, #8FA98F 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 34px rgba(174,195,174,0.28));
+}
+
+
+/* ============================================================
+   7. LOG PANEL: LIVE SYSTEM READOUT
+   ============================================================ */
+
+.log-panel { position: relative; overflow: hidden; }
+
+.log-panel::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -30%;
+  height: 30%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%,
+    rgba(55,169,106,0.10) 55%, rgba(55,169,106,0.18) 82%, transparent 100%);
+  animation: cairn-scan 5.5s linear infinite;
+}
+@keyframes cairn-scan {
+  0%   { transform: translateY(0);    opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(440%); opacity: 0; }
+}
+
+.log-header { position: relative; }
+.log-header::after {
+  content: "";
+  position: absolute;
+  right: 0; top: 50%;
+  width: 7px; height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--primary-hover);
+  animation: cairn-pulse 2.4s ease-out infinite;
+}
+@keyframes cairn-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(55,169,106,0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(55,169,106,0);    }
+  100% { box-shadow: 0 0 0 0   rgba(55,169,106,0);    }
+}
+
+.log-timestamp { color: var(--primary-hover) !important; }
+.log-msg       { color: var(--text-mid) !important; }
+.spec-num      { text-shadow: none !important; }
+
+
+/* ============================================================
+   8. REVEALS
+   ============================================================ */
+
+[data-reveal],
+[data-reveal-stagger] > * {
+  transform: translateY(14px) scale(0.992);
+  transition: opacity 460ms var(--ease), transform 460ms var(--ease);
+}
+[data-reveal].is-visible,
+[data-reveal-stagger].is-visible > * { transform: none; }
+
+[data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms;   }
+[data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 60ms;  }
+[data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 120ms; }
+[data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 180ms; }
+[data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 240ms; }
+
+
+/* ============================================================
+   9. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after,
+  .log-panel::after, .log-header::after { animation: none !important; }
+  .log-panel::after { opacity: 0 !important; }
+  .btn::after, .nav-cta-btn::after { display: none !important; }
+  .spec-row, .pricing-card { transform: none !important; }
+}
+
+
+/* ============================================================
+   10. OPTIONAL: THE LAST PAPER SIGNAL
+   Body copy is Lora, a serif. Serif body text is the strongest
+   remaining printed-document cue. Uncomment to go fully sans.
+   Left off because typefaces are a locked brand asset.
+
+   body, p, li, .bio-text, .case-body-text, .spec-desc,
+   .faq-content-inner, .problem-left-copy p, .hero-sub {
+     font-family: var(--font-display) !important;
+     font-weight: 400;
+     letter-spacing: -0.005em;
+   }
+   ============================================================ */
