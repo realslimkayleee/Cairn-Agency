@@ -1196,3 +1196,132 @@ em, i, .problem-left-copy em {
   font-feature-settings: "tnum" 1;
 }
 
+
+/* ============================================================
+   24. ANCHOR OFFSET FOR THE FIXED HEADER
+   Added 07/31/2026.
+
+   The header is position:fixed at 80px tall, and every nav link
+   is a same page #anchor. Nothing ever accounted for that, so
+   the browser scrolled each section to y=0 and the header sat on
+   top of the first line. "Who you are actually working with" and
+   the pricing phase headings were the worst hit.
+
+   scroll-padding-top on the scroll container fixes every anchor
+   at once, including any added later. Preferred over putting
+   scroll-margin-top on each section, which has to be maintained.
+   ============================================================ */
+
+html {
+  scroll-padding-top: 108px;
+}
+
+@media (max-width: 900px) {
+  html { scroll-padding-top: 92px; }
+}
+
+
+/* ============================================================
+   25. THE WORDMARK, MATCHED TO THE LINKEDIN BANNER
+   Added 07/31/2026 at Kaylee's request.
+
+   This reverses section 17 and section 21, which set the wordmark
+   light and wide on the reasoning that a small wordmark wants
+   lighter weight and open tracking. The banner went the other way,
+   heavy and tight, and that is now the reference. Later section
+   wins, so 17 and 21 are left in place as the record of why they
+   said what they said.
+
+   Values are lifted from the banner: Poppins 800, -0.02em.
+   ============================================================ */
+
+.nav-brand span {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  padding-right: 0 !important;      /* no trailing track left to cancel */
+  color: #FFFFFF !important;
+}
+
+/* The hover was a tracking animation, which only reads on a
+   wide-tracked wordmark. On a tight one it looks like a glitch,
+   so hover becomes a glow instead. */
+.nav-brand:hover span {
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 0 18px rgba(79, 214, 141, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-brand:hover span { letter-spacing: -0.02em !important; }
+}
+
+
+/* ============================================================
+   26. STONE METER, MATCHED TO THE REFINED MARK
+   Added 07/31/2026.
+
+   TWO THINGS HERE, and the first one is a bug.
+
+   1. The ramp was upside down. calc-stone-5 is the BASE and
+      calc-stone-1 is the TOP, per the markup comments and the
+      JS in updateStonesMeter(). Section 15 gave the base the
+      lightest sage and the top the darkest, which is the exact
+      inverse of the stonemark, where the cap is near white and
+      the base is forest green.
+
+   2. The ramp is now the refined mark's ramp, so the calculator
+      and the logo read as the same object.
+
+   The IDs and the .active-stone class are untouched, so the
+   calculator logic is unaffected.
+   ============================================================ */
+
+.calc-meter-svg path#calc-stone-1.active-stone { fill: #F2F8F0 !important; }  /* top, near white */
+.calc-meter-svg path#calc-stone-2.active-stone { fill: #C4DCC4 !important; }
+.calc-meter-svg path#calc-stone-3.active-stone { fill: #93BE9E !important; }
+.calc-meter-svg path#calc-stone-4.active-stone { fill: #5FA478 !important; }
+.calc-meter-svg path#calc-stone-5.active-stone { fill: #2D8B57 !important; }  /* base, forest */
+
+/* Lit cap and shaded underside pushed harder, so the stones read
+   as volumes rather than as filled outlines. Matches the way the
+   refined mark builds depth. */
+.calc-meter-svg .stone-lit   { opacity: 0.72 !important; }
+.calc-meter-svg .stone-shade { opacity: 0.85 !important; }
+
+.calc-meter-svg path.active-stone {
+  stroke: rgba(255, 255, 255, 0.62) !important;
+  stroke-width: 1.2 !important;
+}
+
+/* Inactive stones sit further back so the lit ones carry the eye. */
+.calc-meter-svg path[id^="calc-stone"] {
+  fill: rgba(174, 195, 174, 0.05) !important;
+}
+
+/* The mark's halo, ported. Two layers: a tight bright one that
+   follows the silhouette and a wide soft one for ambience. */
+.stone-stack {
+  filter:
+    url(#stoneShadow)
+    drop-shadow(0 0 14px rgba(79, 214, 141, 0.42))
+    drop-shadow(0 0 40px rgba(45, 139, 87, 0.30)) !important;
+}
+
+
+/* ============================================================
+   27. NAV MARK, NOW VECTOR
+   Added 07/31/2026. The nav logo moved from
+   cairn-stone-mark-cropped.png to cairn-mark-nav.svg, which is
+   the dimensional rebuild on a viewBox cropped tight to the
+   stones so it fills its box instead of floating in padding.
+   ============================================================ */
+
+.nav-brand-img {
+  height: 38px !important;
+  width: auto !important;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .nav-brand-img { height: 32px !important; }
+}
+

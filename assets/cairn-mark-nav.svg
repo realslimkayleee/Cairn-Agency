@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="88 88 336 348" width="336" height="348" role="img" aria-label="Cairn">
+  <title>Cairn stonemark, refined</title>
+  <defs>
+
+    <!-- ONE continuous ramp across the entire stack, white at the cap
+         down to forest at the base. Every stone is filled from this same
+         gradient in user space, which is what makes the fade read as one
+         slow move instead of five separate steps. -->
+    <linearGradient id="ramp" gradientUnits="userSpaceOnUse" x1="230" y1="98" x2="286" y2="412">
+      <stop offset="0"    stop-color="#FFFFFF"/>
+      <stop offset="0.10" stop-color="#EFF6ED"/>
+      <stop offset="0.26" stop-color="#C8DDC6"/>
+      <stop offset="0.44" stop-color="#9CC0A2"/>
+      <stop offset="0.62" stop-color="#6DAA81"/>
+      <stop offset="0.80" stop-color="#46966A"/>
+      <stop offset="1"    stop-color="#2D8B57"/>
+    </linearGradient>
+
+    <!-- Lit top face. Sits over the ramp, never replaces it. -->
+    <linearGradient id="face" x1="0.05" y1="0" x2="0.9" y2="1">
+      <stop offset="0"   stop-color="#FFFFFF" stop-opacity="0.42"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="1"   stop-color="#0E2A1A" stop-opacity="0.10"/>
+    </linearGradient>
+
+    <!-- Body falloff. Transparent at the shoulder, shadow at the belly. -->
+    <linearGradient id="fall" x1="0.15" y1="0" x2="0.8" y2="1">
+      <stop offset="0"    stop-color="#0E2A1A" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#0E2A1A" stop-opacity="0.14"/>
+      <stop offset="1"    stop-color="#081A10" stop-opacity="0.46"/>
+    </linearGradient>
+
+    <!-- Cool separation down the right edge. -->
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="0.58" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="1"    stop-color="#EAFBF0" stop-opacity="0.75"/>
+    </linearGradient>
+
+    <filter id="soft"   x="-70%" y="-180%" width="240%" height="460%"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="softer" x="-70%" y="-180%" width="240%" height="460%"><feGaussianBlur stdDeviation="13"/></filter>
+    <filter id="ground" x="-60%" y="-250%" width="220%" height="600%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="halo"   x="-45%" y="-30%"  width="190%" height="160%"><feGaussianBlur stdDeviation="17"/></filter>
+    <filter id="halo2"  x="-70%" y="-45%"  width="240%" height="190%"><feGaussianBlur stdDeviation="40"/></filter>
+
+    <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+    </filter>
+
+    <!-- Stone profiles. Sides bow outward on cubic curves so the widest
+         point is the belly, not the rim. All five share one vertical axis
+         at x = 256. -->
+    <g id="sil">
+      <path d="M117 338 C98 353.6 98 370.2 126.4 390 A129.6 20.7 0 0 0 385.6 390 C414 370.2 414 353.6 395 338 Z"/>
+      <ellipse cx="256" cy="338" rx="139" ry="22.3"/>
+      <path d="M145.1 265.4 C130 279.2 130 293.9 152.7 311.4 A103.3 16.6 0 0 0 359.3 311.4 C382 293.9 382 279.2 366.9 265.4 Z"/>
+      <ellipse cx="256" cy="265.4" rx="110.9" ry="17.8"/>
+      <path d="M170.6 202.7 C159 214.7 159 227.5 176.5 242.7 A79.5 12.7 0 0 0 335.5 242.7 C353 227.5 353 214.7 341.4 202.7 Z"/>
+      <ellipse cx="256" cy="202.7" rx="85.4" ry="13.6"/>
+      <path d="M194.4 149.5 C186 159.7 186 170.6 198.6 183.5 A57.4 9.2 0 0 0 313.4 183.5 C326 170.6 326 159.7 317.6 149.5 Z"/>
+      <ellipse cx="256" cy="149.5" rx="61.6" ry="9.9"/>
+      <path d="M219 106 C214 114.4 214 123.4 221.6 134 A34.4 5.5 0 0 0 290.4 134 C298 123.4 298 114.4 293 106 Z"/>
+      <ellipse cx="256" cy="106" rx="37" ry="5.9"/>
+    </g>
+
+    <clipPath id="c1"><path d="M117 338 C98 353.6 98 370.2 126.4 390 A129.6 20.7 0 0 0 385.6 390 C414 370.2 414 353.6 395 338 Z"/><ellipse cx="256" cy="338" rx="139" ry="22.3"/></clipPath>
+    <clipPath id="c2"><path d="M145.1 265.4 C130 279.2 130 293.9 152.7 311.4 A103.3 16.6 0 0 0 359.3 311.4 C382 293.9 382 279.2 366.9 265.4 Z"/><ellipse cx="256" cy="265.4" rx="110.9" ry="17.8"/></clipPath>
+    <clipPath id="c3"><path d="M170.6 202.7 C159 214.7 159 227.5 176.5 242.7 A79.5 12.7 0 0 0 335.5 242.7 C353 227.5 353 214.7 341.4 202.7 Z"/><ellipse cx="256" cy="202.7" rx="85.4" ry="13.6"/></clipPath>
+    <clipPath id="c4"><path d="M194.4 149.5 C186 159.7 186 170.6 198.6 183.5 A57.4 9.2 0 0 0 313.4 183.5 C326 170.6 326 159.7 317.6 149.5 Z"/><ellipse cx="256" cy="149.5" rx="61.6" ry="9.9"/></clipPath>
+    <clipPath id="c5"><path d="M219 106 C214 114.4 214 123.4 221.6 134 A34.4 5.5 0 0 0 290.4 134 C298 123.4 298 114.4 293 106 Z"/><ellipse cx="256" cy="106" rx="37" ry="5.9"/></clipPath>
+
+    <clipPath id="all"><use href="#sil"/></clipPath>
+  </defs>
+
+  <!-- Halo layers removed for the nav variant. At 38px they only
+       produced a hard edged glow box where the viewBox clips them. -->
+
+  <!-- Ground contact shadow -->
+  <ellipse cx="256" cy="399" rx="163" ry="26" fill="#06140C" opacity="0.46" filter="url(#ground)"/>
+
+  <!-- ===== STONE 1, base ===== -->
+  <g clip-path="url(#c1)">
+    <path d="M117 338 C98 353.6 98 370.2 126.4 390 A129.6 20.7 0 0 0 385.6 390 C414 370.2 414 353.6 395 338 Z" fill="url(#ramp)"/>
+    <path d="M117 338 C98 353.6 98 370.2 126.4 390 A129.6 20.7 0 0 0 385.6 390 C414 370.2 414 353.6 395 338 Z" fill="url(#fall)"/>
+    <ellipse cx="256" cy="338" rx="139" ry="22.3" fill="url(#ramp)"/>
+    <ellipse cx="256" cy="338" rx="139" ry="22.3" fill="url(#face)"/>
+    <ellipse cx="256" cy="341" rx="114" ry="18.4" fill="#0B2214" opacity="0.44" filter="url(#soft)"/>
+    <ellipse cx="207" cy="332" rx="66" ry="9" fill="#FFFFFF" opacity="0.24" filter="url(#soft)"/>
+    <ellipse cx="256" cy="392" rx="132" ry="17" fill="#05120A" opacity="0.42" filter="url(#softer)"/>
+    <path d="M117 338 C98 353.6 98 370.2 126.4 390 A129.6 20.7 0 0 0 385.6 390 C414 370.2 414 353.6 395 338 Z" fill="none" stroke="url(#rim)" stroke-width="3.6"/>
+    <ellipse cx="256" cy="338" rx="139" ry="22.3" fill="none" stroke="#FFFFFF" stroke-opacity="0.26" stroke-width="1.6"/>
+  </g>
+
+  <!-- ===== STONE 2 ===== -->
+  <g clip-path="url(#c2)">
+    <path d="M145.1 265.4 C130 279.2 130 293.9 152.7 311.4 A103.3 16.6 0 0 0 359.3 311.4 C382 293.9 382 279.2 366.9 265.4 Z" fill="url(#ramp)"/>
+    <path d="M145.1 265.4 C130 279.2 130 293.9 152.7 311.4 A103.3 16.6 0 0 0 359.3 311.4 C382 293.9 382 279.2 366.9 265.4 Z" fill="url(#fall)"/>
+    <ellipse cx="256" cy="265.4" rx="110.9" ry="17.8" fill="url(#ramp)"/>
+    <ellipse cx="256" cy="265.4" rx="110.9" ry="17.8" fill="url(#face)"/>
+    <ellipse cx="256" cy="268" rx="88" ry="14.2" fill="#0B2214" opacity="0.44" filter="url(#soft)"/>
+    <ellipse cx="211" cy="260" rx="52" ry="7" fill="#FFFFFF" opacity="0.25" filter="url(#soft)"/>
+    <ellipse cx="256" cy="313" rx="105" ry="14" fill="#05120A" opacity="0.42" filter="url(#softer)"/>
+    <path d="M145.1 265.4 C130 279.2 130 293.9 152.7 311.4 A103.3 16.6 0 0 0 359.3 311.4 C382 293.9 382 279.2 366.9 265.4 Z" fill="none" stroke="url(#rim)" stroke-width="3.4"/>
+    <ellipse cx="256" cy="265.4" rx="110.9" ry="17.8" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1.5"/>
+  </g>
+
+  <!-- ===== STONE 3 ===== -->
+  <g clip-path="url(#c3)">
+    <path d="M170.6 202.7 C159 214.7 159 227.5 176.5 242.7 A79.5 12.7 0 0 0 335.5 242.7 C353 227.5 353 214.7 341.4 202.7 Z" fill="url(#ramp)"/>
+    <path d="M170.6 202.7 C159 214.7 159 227.5 176.5 242.7 A79.5 12.7 0 0 0 335.5 242.7 C353 227.5 353 214.7 341.4 202.7 Z" fill="url(#fall)"/>
+    <ellipse cx="256" cy="202.7" rx="85.4" ry="13.6" fill="url(#ramp)"/>
+    <ellipse cx="256" cy="202.7" rx="85.4" ry="13.6" fill="url(#face)"/>
+    <ellipse cx="256" cy="205" rx="64" ry="10.4" fill="#0B2214" opacity="0.42" filter="url(#soft)"/>
+    <ellipse cx="219" cy="198" rx="40" ry="5.6" fill="#FFFFFF" opacity="0.27" filter="url(#soft)"/>
+    <ellipse cx="256" cy="245" rx="80" ry="11" fill="#05120A" opacity="0.40" filter="url(#softer)"/>
+    <path d="M170.6 202.7 C159 214.7 159 227.5 176.5 242.7 A79.5 12.7 0 0 0 335.5 242.7 C353 227.5 353 214.7 341.4 202.7 Z" fill="none" stroke="url(#rim)" stroke-width="3.2"/>
+    <ellipse cx="256" cy="202.7" rx="85.4" ry="13.6" fill="none" stroke="#FFFFFF" stroke-opacity="0.30" stroke-width="1.4"/>
+  </g>
+
+  <!-- ===== STONE 4 ===== -->
+  <g clip-path="url(#c4)">
+    <path d="M194.4 149.5 C186 159.7 186 170.6 198.6 183.5 A57.4 9.2 0 0 0 313.4 183.5 C326 170.6 326 159.7 317.6 149.5 Z" fill="url(#ramp)"/>
+    <path d="M194.4 149.5 C186 159.7 186 170.6 198.6 183.5 A57.4 9.2 0 0 0 313.4 183.5 C326 170.6 326 159.7 317.6 149.5 Z" fill="url(#fall)"/>
+    <ellipse cx="256" cy="149.5" rx="61.6" ry="9.9" fill="url(#ramp)"/>
+    <ellipse cx="256" cy="149.5" rx="61.6" ry="9.9" fill="url(#face)"/>
+    <ellipse cx="256" cy="151.6" rx="42" ry="6.6" fill="#0B2214" opacity="0.40" filter="url(#soft)"/>
+    <ellipse cx="230" cy="146" rx="28" ry="4" fill="#FFFFFF" opacity="0.30" filter="url(#soft)"/>
+    <ellipse cx="256" cy="185" rx="58" ry="9" fill="#05120A" opacity="0.38" filter="url(#softer)"/>
+    <path d="M194.4 149.5 C186 159.7 186 170.6 198.6 183.5 A57.4 9.2 0 0 0 313.4 183.5 C326 170.6 326 159.7 317.6 149.5 Z" fill="none" stroke="url(#rim)" stroke-width="3"/>
+    <ellipse cx="256" cy="149.5" rx="61.6" ry="9.9" fill="none" stroke="#FFFFFF" stroke-opacity="0.32" stroke-width="1.3"/>
+  </g>
+
+  <!-- ===== STONE 5, cap ===== -->
+  <g clip-path="url(#c5)">
+    <path d="M219 106 C214 114.4 214 123.4 221.6 134 A34.4 5.5 0 0 0 290.4 134 C298 123.4 298 114.4 293 106 Z" fill="url(#ramp)"/>
+    <path d="M219 106 C214 114.4 214 123.4 221.6 134 A34.4 5.5 0 0 0 290.4 134 C298 123.4 298 114.4 293 106 Z" fill="url(#fall)"/>
+    <ellipse cx="256" cy="106" rx="37" ry="5.9" fill="url(#ramp)"/>
+    <ellipse cx="256" cy="106" rx="37" ry="5.9" fill="url(#face)"/>
+    <ellipse cx="241" cy="104" rx="17" ry="2.7" fill="#FFFFFF" opacity="0.36" filter="url(#soft)"/>
+    <ellipse cx="256" cy="136" rx="34" ry="6" fill="#05120A" opacity="0.34" filter="url(#softer)"/>
+    <path d="M219 106 C214 114.4 214 123.4 221.6 134 A34.4 5.5 0 0 0 290.4 134 C298 123.4 298 114.4 293 106 Z" fill="none" stroke="url(#rim)" stroke-width="2.8"/>
+    <ellipse cx="256" cy="106" rx="37" ry="5.9" fill="none" stroke="#FFFFFF" stroke-opacity="0.36" stroke-width="1.2"/>
+  </g>
+
+  <!-- Light stone tooth. Kept low so the surfaces stay smooth. -->
+  <g clip-path="url(#all)" style="mix-blend-mode:overlay" opacity="0.09">
+    <rect x="80" y="80" width="352" height="345" filter="url(#grain)"/>
+  </g>
+</svg>
