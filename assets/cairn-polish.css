@@ -991,3 +991,208 @@ html::after {
 @media (prefers-reduced-motion: reduce) {
   .nav-brand:hover span { letter-spacing: 0.30em !important; }
 }
+
+
+/* ============================================================
+   22. MOBILE NAV DRAWER: BACKGROUND AND LEGIBILITY FIX
+   Added 07/30/2026.
+
+   THE BUG
+   On phones the slide-out menu looked transparent and the link
+   text was unreadable against the page behind it.
+
+   THE CAUSE
+   `.site-header` carries a backdrop-filter: blur(16px) in the
+   inline styles, and blur(20px) saturate(140%) again in
+   cairn-tech-layer.css section on .site-header. Any element with
+   a backdrop-filter becomes the containing block for its
+   `position: fixed` descendants. The drawer is one of those
+   descendants, so its `top:0; right:0; bottom:0` resolved
+   against the 80px tall header instead of against the viewport.
+   Its opaque background painted only that 80px strip, while the
+   drawer's 120px top padding pushed every link down below the
+   strip, where they rendered over the live page with nothing
+   behind them.
+
+   Section 20 above made it worse. `gap: 34px !important` was
+   written without a media query, so it overrode the drawer's
+   intended mobile `gap: 24px` and pushed the list further still.
+
+   THE FIX
+   1. Drop backdrop-filter from the header below 900px so it
+      stops capturing fixed descendants. Header opacity goes up
+      to compensate, and the blur is an expensive effect to paint
+      on a phone anyway.
+   2. Size the drawer explicitly against the viewport and give it
+      a solid fill, so it stays correct even if a later layer
+      puts a filter back on the header.
+   3. Raise the toggle above the open panel so the close X stays
+      tappable.
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* 1. Header stops acting as the containing block. */
+  .site-header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(18, 20, 18, 0.94) !important;
+  }
+  .site-header.is-scrolled {
+    background: rgba(14, 16, 14, 0.97) !important;
+  }
+
+  /* 2. The drawer: explicit viewport box, solid fill. */
+  .nav-links-wrap {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: min(320px, 86vw) !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 1200 !important;
+
+    background-color: #171A17 !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-left: 1px solid rgba(247, 244, 236, 0.10) !important;
+    box-shadow: -26px 0 64px rgba(0, 0, 0, 0.55);
+
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    padding: 104px 26px 32px !important;
+    gap: 2px !important;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Links become full width rows with real tap targets. */
+  .nav-links-wrap > li { width: 100%; }
+
+  .nav-links-wrap > li > a {
+    display: block;
+    width: 100%;
+    padding: 15px 0 !important;
+    margin-right: 0 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.16em !important;
+    color: rgba(247, 244, 236, 0.94) !important;
+    border-bottom: 1px solid rgba(247, 244, 236, 0.07);
+    white-space: nowrap;
+  }
+  .nav-links-wrap > li:last-of-type > a { border-bottom: none; }
+  .nav-links-wrap > li > a:active { color: #FFFFFF !important; }
+
+  /* Book a Walkthrough sits apart from the link list and keeps
+     its own button styling rather than inheriting the row type. */
+  .nav-links-wrap .mobile-nav-cta {
+    margin-top: 22px !important;
+    border-bottom: none;
+  }
+  .nav-links-wrap .mobile-nav-cta > a {
+    border-bottom: none !important;
+    padding: 14px 18px !important;
+    font-size: 13px !important;
+    letter-spacing: 0.10em !important;
+  }
+
+  /* 3. Toggle stays above the open panel. */
+  .mobile-nav-toggle {
+    position: relative;
+    z-index: 1300 !important;
+  }
+  .mobile-nav-toggle span {
+    background-color: #F7F4EC !important;
+  }
+
+  /* Scrim behind the open drawer. Cosmetic only. It hangs off
+     the header rather than the drawer because the drawer's
+     translateX makes it the containing block for its own fixed
+     children, and its overflow-y would clip them.
+     If this ever misbehaves, delete this one rule. Nothing else
+     depends on it. */
+  .site-header:has(.nav-links-wrap.open)::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.55);
+  }
+}
+
+
+/* ============================================================
+   23. ONE TYPEFACE SITEWIDE
+   Added 07/31/2026 at Kaylee's request.
+
+   This retires Lora. The site now runs entirely on Poppins, the
+   face used by the CAIRN wordmark in the header.
+
+   NOTE, because this matters: the operating brief lists typefaces
+   as a locked brand asset, and section 10 of cairn-tech-layer.css
+   had this change written and deliberately left commented out for
+   that reason. This section supersedes it. To revert, delete this
+   whole block. Nothing else depends on it.
+
+   HOW IT WORKS. Every font rule on the live page resolves through
+   one of two variables, and nothing hardcodes a family name. So
+   repointing --font-body is enough to convert the entire site in
+   one move, including anything added later that uses the variable.
+   The explicit selectors below are belt and braces for elements
+   that set a family directly.
+   ============================================================ */
+
+:root {
+  --font-body: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+body,
+p, li, blockquote,
+.hero-sub, .bio-text, .case-body-text, .spec-desc,
+.faq-content-inner, .problem-left-copy, .problem-right-col p,
+.calc-footnote, .hero-cta-note, .ledger-title, .spec-subtitle {
+  font-family: var(--font-display) !important;
+}
+
+/* OPTICAL CORRECTION. Poppins has a noticeably larger x-height and
+   wider letterforms than Lora, so body copy set at the old sizes
+   reads bigger and looser than it did. Left uncorrected the page
+   feels inflated. These three adjustments put the colour of the
+   text back where it was:
+     - a hair of negative tracking to close the extra width
+     - slightly tighter leading, since a taller x-height needs less
+     - weight 400 held explicitly, because Lora 400 and Poppins 400
+       do not carry the same visual weight and some rules relied on
+       Lora's heavier stroke */
+body,
+p, li,
+.hero-sub, .bio-text, .case-body-text, .spec-desc,
+.faq-content-inner, .problem-right-col p {
+  font-weight: 400;
+  letter-spacing: -0.006em;
+  line-height: 1.55;
+}
+
+/* The italic pull quotes lose their serif character entirely once
+   Lora is gone, and Poppins italic at low weight reads as an
+   accident rather than emphasis. Emphasis moves to weight instead. */
+em, i, .problem-left-copy em {
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* Lora was carrying the numerals in the ledger, calculator and log.
+   Poppins tabular figures keep those columns from jittering.
+   Selector list verified against index.html, 07/31/2026. */
+.ledger-row, .ledger-hours-val, .calc-output, .log-row {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
